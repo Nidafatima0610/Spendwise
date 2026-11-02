@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  body {
+    margin: 0;
+    padding: 30px;
+    background: #0d1117;
+    font-family: 'Consolas', 'Fira Code', 'Courier New', monospace;
+    color: #c9d1d9;
+  }
+  .window {
+    background: #161b22;
+    border-radius: 12px;
+    border: 1px solid #30363d;
+    box-shadow: 0 16px 36px rgba(0,0,0,0.6);
+    overflow: hidden;
+  }
+  .titlebar {
+    background: #21262d;
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #30363d;
+  }
+  .dots {
+    display: flex;
+    gap: 8px;
+    margin-right: 16px;
+  }
+  .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+  .dot.red { background: #ff5f56; }
+  .dot.yellow { background: #ffbd2e; }
+  .dot.green { background: #27c93f; }
+  .title {
+    color: #8b949e;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  pre {
+    margin: 0;
+    padding: 24px;
+    font-size: 13.5px;
+    line-height: 1.55;
+    overflow-x: auto;
+  }
+  .kw { color: #ff7b72; font-weight: bold; }
+  .type { color: #79c0ff; }
+  .str { color: #a5d6ff; }
+  .comment { color: #8b949e; font-style: italic; }
+  .num { color: #d2a8ff; }
+  .fn { color: #d2a8ff; }
+  .sql { color: #7ee787; }
+</style>
+</head>
+<body>
+<div class="window">
+  <div class="titlebar">
+    <div class="dots">
+      <div class="dot red"></div>
+      <div class="dot yellow"></div>
+      <div class="dot green"></div>
+    </div>
+    <div class="title">lib/core/database/app_database.dart — Local SQLite Singleton, Foreign Keys & Pre-Seeding</div>
+  </div>
+  <pre>
+<span class="kw">class</span> <span class="type">AppDatabase</span> {
+  <span class="kw">static final</span> <span class="type">AppDatabase</span> instance = <span class="type">AppDatabase</span>.<span class="fn">_internal</span>();
+
+  <span class="type">Future</span>&lt;<span class="type">Database</span>&gt; <span class="kw">get</span> database <span class="kw">async</span> {
+    <span class="kw">if</span> (_database != <span class="kw">null</span> && _database!.<span class="fn">isOpen</span>) <span class="kw">return</span> _database!;
+    _database = <span class="kw">await</span> <span class="fn">_initDatabase</span>();
+    <span class="kw">return</span> _database!;
+  }
+
+  <span class="type">Future</span>&lt;<span class="kw">void</span>&gt; <span class="fn">_onConfigure</span>(<span class="type">Database</span> db) <span class="kw">async</span> {
+    <span class="comment">// Enforce referential integrity on every SQLite connection</span>
+    <span class="kw">await</span> db.<span class="fn">execute</span>(<span class="str">'PRAGMA foreign_keys = ON;'</span>);
+  }
+
+  <span class="type">Future</span>&lt;<span class="kw">void</span>&gt; <span class="fn">_onCreate</span>(<span class="type">Database</span> db, <span class="type">int</span> version) <span class="kw">async</span> {
+    <span class="kw">final</span> batch = db.<span class="fn">batch</span>();
+    <span class="comment">// 1. Create Tables: Categories, Transactions, Budgets</span>
+    batch.<span class="fn">execute</span>(<span class="type">DatabaseConstants</span>.createCategoriesTable);
+    batch.<span class="fn">execute</span>(<span class="type">DatabaseConstants</span>.createTransactionsTable);
+    batch.<span class="fn">execute</span>(<span class="type">DatabaseConstants</span>.createBudgetsTable);
+
+    <span class="comment">// 2. Create High-Performance Indexes</span>
+    batch.<span class="fn">execute</span>(<span class="type">DatabaseConstants</span>.createTransactionsDateIndex);
+    batch.<span class="fn">execute</span>(<span class="type">DatabaseConstants</span>.createTransactionsCategoryIndex);
+
+    <span class="comment">// 3. Batch Pre-Seed 11 Default Categories into SQLite</span>
+    <span class="fn">_seedDefaultCategories</span>(batch);
+    <span class="kw">await</span> batch.<span class="fn">commit</span>(noResult: <span class="kw">true</span>);
+  }
+}
+</pre>
+</div>
+</body>
+</html>
+

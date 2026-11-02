@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  body {
+    margin: 0;
+    padding: 30px;
+    background: #0d1117;
+    font-family: 'Consolas', 'Fira Code', 'Courier New', monospace;
+    color: #c9d1d9;
+  }
+  .window {
+    background: #161b22;
+    border-radius: 12px;
+    border: 1px solid #30363d;
+    box-shadow: 0 16px 36px rgba(0,0,0,0.6);
+    overflow: hidden;
+  }
+  .titlebar {
+    background: #21262d;
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #30363d;
+  }
+  .dots {
+    display: flex;
+    gap: 8px;
+    margin-right: 16px;
+  }
+  .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+  .dot.red { background: #ff5f56; }
+  .dot.yellow { background: #ffbd2e; }
+  .dot.green { background: #27c93f; }
+  .title {
+    color: #8b949e;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  pre {
+    margin: 0;
+    padding: 24px;
+    font-size: 13.5px;
+    line-height: 1.55;
+    overflow-x: auto;
+  }
+  .kw { color: #ff7b72; font-weight: bold; }
+  .type { color: #79c0ff; }
+  .str { color: #a5d6ff; }
+  .comment { color: #8b949e; font-style: italic; }
+  .num { color: #d2a8ff; }
+  .fn { color: #d2a8ff; }
+  .ann { color: #ffa657; }
+</style>
+</head>
+<body>
+<div class="window">
+  <div class="titlebar">
+    <div class="dots">
+      <div class="dot red"></div>
+      <div class="dot yellow"></div>
+      <div class="dot green"></div>
+    </div>
+    <div class="title">lib/models/transaction_model.dart & category_model.dart — Fintech Minor Units Standard</div>
+  </div>
+  <pre>
+<span class="kw">enum</span> <span class="type">TransactionType</span> { income, expense; }
+
+<span class="comment">/// Core transaction data model representing income or expense entries.</span>
+<span class="comment">/// NOTE: [amount] is stored strictly as an INTEGER in minor currency units (paisas)</span>
+<span class="comment">/// to prevent IEEE 754 floating-point rounding errors. 1 PKR = 100 Paisa.</span>
+<span class="kw">class</span> <span class="type">TransactionModel</span> {
+  <span class="kw">final</span> <span class="type">String</span> id;
+  <span class="kw">final</span> <span class="type">TransactionType</span> type;
+  <span class="kw">final</span> <span class="type">int</span> amount; <span class="comment">// Integer in minor units (e.g., 250000 = PKR 2,500.00)</span>
+  <span class="kw">final</span> <span class="type">DateTime</span> date;
+  <span class="kw">final</span> <span class="type">String</span> categoryId;
+  <span class="kw">final</span> <span class="type">String</span>? note;
+
+  <span class="kw">const</span> <span class="fn">TransactionModel</span>({
+    <span class="kw">required</span> <span class="kw">this</span>.id,
+    <span class="kw">required</span> <span class="kw">this</span>.type,
+    <span class="kw">required</span> <span class="kw">this</span>.amount,
+    <span class="kw">required</span> <span class="kw">this</span>.date,
+    <span class="kw">required</span> <span class="kw">this</span>.categoryId,
+    <span class="kw">this</span>.note,
+  });
+
+  <span class="type">double</span> <span class="kw">get</span> amountInMajorUnits => amount / <span class="num">100.0</span>;
+  <span class="type">String</span> <span class="kw">get</span> formattedAmount => <span class="type">CurrencyFormatter</span>.<span class="fn">formatMinorUnits</span>(amount);
+  <span class="type">bool</span> <span class="kw">get</span> isIncome => type == <span class="type">TransactionType</span>.income;
+  <span class="type">bool</span> <span class="kw">get</span> isExpense => type == <span class="type">TransactionType</span>.expense;
+
+  <span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">dynamic</span>&gt; <span class="fn">toMap</span>() => {
+    <span class="str">'id'</span>: id,
+    <span class="str">'type'</span>: type.name,
+    <span class="str">'amount'</span>: amount,
+    <span class="str">'date'</span>: date.<span class="fn">toIso8601String</span>(),
+    <span class="str">'category_id'</span>: categoryId,
+    <span class="str">'note'</span>: note,
+  };
+}
+</pre>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  body {
+    margin: 0;
+    padding: 30px;
+    background: #0d1117;
+    font-family: 'Consolas', 'Fira Code', 'Courier New', monospace;
+    color: #c9d1d9;
+  }
+  .window {
+    background: #0d1117;
+    border-radius: 12px;
+    border: 1px solid #30363d;
+    box-shadow: 0 16px 36px rgba(0,0,0,0.6);
+    overflow: hidden;
+  }
+  .titlebar {
+    background: #161b22;
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #30363d;
+  }
+  .dots {
+    display: flex;
+    gap: 8px;
+    margin-right: 16px;
+  }
+  .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+  .dot.red { background: #ff5f56; }
+  .dot.yellow { background: #ffbd2e; }
+  .dot.green { background: #27c93f; }
+  .title {
+    color: #8b949e;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  pre {
+    margin: 0;
+    padding: 24px;
+    font-size: 14px;
+    line-height: 1.6;
+    overflow-x: auto;
+  }
+  .prompt { color: #58a6ff; font-weight: bold; }
+  .cmd { color: #f0f6fc; }
+  .success { color: #3fb950; font-weight: bold; }
+  .time { color: #8b949e; }
+  .bold { font-weight: bold; }
+</style>
+</head>
+<body>
+<div class="window">
+  <div class="titlebar">
+    <div class="dots">
+      <div class="dot red"></div>
+      <div class="dot yellow"></div>
+      <div class="dot green"></div>
+    </div>
+    <div class="title">SpendWise Terminal Verification — Flutter Analyze & Flutter Test</div>
+  </div>
+  <pre>
+<span class="prompt">PS C:\Users\umair\Desktop\spend_wise></span> <span class="cmd">flutter analyze</span>
+Analyzing spend_wise...
+<span class="success">No issues found!</span> (ran in 5.3s)
+
+<span class="prompt">PS C:\Users\umair\Desktop\spend_wise></span> <span class="cmd">flutter test</span>
+00:00 <span class="time">+0:</span> loading C:/Users/umair/Desktop/spend_wise/test/database_test.dart
+00:00 <span class="time">+0:</span> SQLite Schema & CRUD Unit Tests: Verifies Categories & Transactions schema and constraints
+00:00 <span class="time">+1:</span> SQLite Schema & CRUD Unit Tests: Enforces foreign key constraint between transactions & categories
+00:00 <span class="time">+2:</span> SpendWise App & Navigation Tests: App renders Dashboard and bottom navigation destinations
+00:03 <span class="time">+3:</span> Model & Minor Currency Unit Tests: Transaction Model minor currency units conversion
+00:03 <span class="time">+4:</span> Model & Minor Currency Unit Tests: Category Model serialization and icon resolution
+00:03 <span class="time">+5:</span> Model & Minor Currency Unit Tests: CurrencyFormatter parses input and formats PKR accurately
+<span class="success">00:03 +6: All tests passed!</span>
+</pre>
+</div>
+</body>
+</html>
+

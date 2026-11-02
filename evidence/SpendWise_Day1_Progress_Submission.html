@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SpendWise — Day 1 Daily Progress Submission Package</title>
+<style>
+  @page {
+    size: A4;
+    margin: 14mm 16mm;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: #1e1435;
+    background: #ffffff;
+    line-height: 1.5;
+    font-size: 13px;
+    margin: 0;
+    padding: 0;
+  }
+  .header {
+    border-bottom: 2px solid #6536c7;
+    padding-bottom: 14px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .brand {
+    font-size: 24px;
+    font-weight: 800;
+    color: #6536c7;
+    letter-spacing: -0.5px;
+  }
+  .brand-sub {
+    font-size: 13px;
+    font-weight: 600;
+    color: #6b647d;
+    margin-top: 2px;
+  }
+  .meta-box {
+    text-align: right;
+    font-size: 11.5px;
+    color: #6b647d;
+    line-height: 1.4;
+  }
+  .badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 999px;
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .badge-purple { background: #ede9fe; color: #4f28a4; }
+  .badge-green { background: #d1fae5; color: #047857; }
+  .badge-red { background: #fee2e2; color: #b91c1c; }
+  
+  h2 {
+    color: #1e1435;
+    font-size: 16px;
+    font-weight: 700;
+    border-left: 4px solid #6536c7;
+    padding-left: 10px;
+    margin-top: 24px;
+    margin-bottom: 10px;
+    page-break-after: avoid;
+  }
+  h3 {
+    color: #4f28a4;
+    font-size: 14px;
+    font-weight: 700;
+    margin-top: 16px;
+    margin-bottom: 6px;
+    page-break-after: avoid;
+  }
+  p, li {
+    color: #2e263d;
+    line-height: 1.55;
+  }
+  ul {
+    margin-top: 4px;
+    margin-bottom: 12px;
+    padding-left: 20px;
+  }
+  li {
+    margin-bottom: 4px;
+  }
+  
+  .card {
+    background: #fbfaff;
+    border: 1px solid #ebe7f5;
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 14px;
+  }
+  .status-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .status-item {
+    background: #f6f4fc;
+    border: 1px solid #e5e1f0;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+  }
+  .status-title {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: #6b647d;
+    text-transform: uppercase;
+  }
+  .status-val {
+    font-size: 15px;
+    font-weight: 800;
+    color: #6536c7;
+    margin-top: 3px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+    margin-bottom: 16px;
+    font-size: 12px;
+  }
+  th, td {
+    border: 1px solid #e5e1f0;
+    padding: 8px 10px;
+    text-align: left;
+  }
+  th {
+    background: #f3f0fa;
+    color: #4f28a4;
+    font-weight: 700;
+  }
+  tr:nth-child(even) {
+    background: #faf9fd;
+  }
+  
+  .screenshots-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin: 14px 0;
+    page-break-inside: avoid;
+  }
+  .screenshots-row-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin: 12px 0;
+    page-break-inside: avoid;
+  }
+  .mockup-container {
+    background: #f6f4fc;
+    border: 1px solid #e5e1f0;
+    border-radius: 10px;
+    padding: 8px;
+    text-align: center;
+  }
+  .mockup-container img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+  .mockup-caption {
+    font-size: 11px;
+    font-weight: 700;
+    color: #4f28a4;
+    margin-top: 6px;
+  }
+  .mockup-sub {
+    font-size: 10px;
+    color: #6b647d;
+  }
+  
+  .code-container {
+    margin: 12px 0;
+    border-radius: 8px;
+    overflow: hidden;
+    page-break-inside: avoid;
+  }
+  .code-container img {
+    width: 100%;
+    display: block;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  
+  .page-break {
+    page-break-before: always;
+  }
+  
+  .notice-box {
+    background: #ede9fe;
+    border-left: 4px solid #6536c7;
+    padding: 10px 14px;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 14px;
+    font-size: 12px;
+  }
+  .notice-box strong {
+    color: #4f28a4;
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div>
+    <div class="brand">SpendWise — Personal Budget & Expense Tracker</div>
+    <div class="brand-sub">Stack & Scale Remote Internship 2026 | Week 02 — Mobile Engineering</div>
+  </div>
+  <div class="meta-box">
+    <div><strong>Deliverable:</strong> Monday (Day 1) Progress Package</div>
+    <div><strong>Date:</strong> November 02, 2026</div>
+    <div><strong>Author:</strong> Intern / Mobile Developer</div>
+    <div><span class="badge badge-purple">Day 1 Foundation Complete</span></div>
+  </div>
+</div>
+
+<div class="status-grid">
+  <div class="status-item">
+    <div class="status-title">Flutter Analyze</div>
+    <div class="status-val" style="color:#047857;">0 Issues (Passed)</div>
+  </div>
+  <div class="status-item">
+    <div class="status-title">Test Suite</div>
+    <div class="status-val" style="color:#047857;">6 / 6 Passed</div>
+  </div>
+  <div class="status-item">
+    <div class="status-title">Target Currency</div>
+    <div class="status-val">PKR (Minor Units)</div>
+  </div>
+  <div class="status-item">
+    <div class="status-title">Storage Architecture</div>
+    <div class="status-val">Offline-First SQLite</div>
+  </div>
+</div>
+
+<div class="notice-box">
+  <strong>Data Separation Notice:</strong> In strict alignment with Week 02 requirements, Day 1 features a complete UI, navigation, domain modeling, and initialized SQLite database schema. Figures shown on the Dashboard and History timeline are clearly labeled <strong>Sample Presentation Data</strong> and are not falsely presented as persisted records. Full transactional CRUD connects in Day 2.
+</div>
+
+<h2>1. Project Title & Internship Details</h2>
+<p>
+  <strong>SpendWise</strong> is a modern, offline-first personal finance and expense tracking application engineered for students and early-career professionals. Built as the Week 02 project for the <strong>Stack & Scale Remote Internship 2026</strong>, SpendWise empowers users to monitor their income, track daily expenditures, set monthly category spending caps, and visualize savings progress without cloud dependencies, paid APIs, or third-party bank logins.
+</p>
+
+<h2>2. Monday's Objectives & Completed Deliverables</h2>
+<ul>
+  <li><strong>Complete 4-Screen Foundation:</strong> Engineered polished interfaces for Dashboard, Add Transaction, Transaction History, and Budgets, along with a functional Settings & Diagnostics screen.</li>
+  <li><strong>Full Bottom Navigation:</strong> Implemented a 5-destination bottom navigation bar with active state pills and persistent tab state via <code>IndexedStack</code>.</li>
+  <li><strong>Fintech Minor-Units Standard:</strong> Implemented <code>TransactionModel</code> and <code>CategoryModel</code> with amounts stored strictly as integers in minor currency units (paisas) to eliminate floating-point rounding errors.</li>
+  <li><strong>Centralized PKR Currency Architecture:</strong> Configured Pakistani Rupee (PKR / Rs.) with centralized formatting logic.</li>
+  <li><strong>SQLite Local Storage Foundation:</strong> Implemented <code>AppDatabase</code> singleton, created tables (<code>categories</code>, <code>transactions</code>, <code>budgets</code>), enforced SQLite foreign keys via PRAGMA, created index optimizations, and pre-seeded 11 default categories.</li>
+  <li><strong>Desktop & Mobile Support:</strong> Integrated <code>sqflite_common_ffi</code> allowing tests and desktop runners to execute alongside native Android.</li>
+  <li><strong>Rigorous Verification:</strong> 100% clean <code>flutter analyze</code> check and 100% passing automated test suite (6/6 tests).</li>
+</ul>
+
+<h2>3. Overview of Premium Fintech UI Design</h2>
+<p>
+  SpendWise was designed from the ground up to match the visual fidelity of tier-one fintech applications. The visual direction features:
+</p>
+<ul>
+  <li><strong>Brand Identity:</strong> Distinctive violet/purple brand identity (<code>#6536C7</code>) complemented by deep purple accents (<code>#4F28A4</code>) and lavender surfaces (<code>#F8F6FE</code>, <code>#F6F4FC</code>).</li>
+  <li><strong>Semantic Color Hierarchy:</strong> Emerald Green (<code>#10B981</code>) for positive cash flow / income, Coral Red (<code>#EF4444</code>) for expenditures, and Amber (<code>#F59E0B</code>) for budget threshold warnings.</li>
+  <li><strong>Design System:</strong> Custom rounded cards (22px radius), subtle multi-layered drop shadows, Material 3 typography scale, and responsive layout constraints (avoiding hardcoded pixel overflow).</li>
+</ul>
+
+<!-- PAGE BREAK FOR SCREENSHOTS -->
+<div class="page-break"></div>
+
+<h2>4. Evidence: Genuine Screenshots from Physical Device (Pixel 6 Pro)</h2>
+<p>The screenshots below were captured directly from the running application on an Android device (Pixel 6 Pro, Android 17):</p>
+
+<div class="screenshots-row-4">
+  <div class="mockup-container">
+    <img src="screenshots/01_dashboard_screen.png" alt="Dashboard Screen">
+    <div class="mockup-caption">A. Dashboard</div>
+    <div class="mockup-sub">Balance & Metrics</div>
+  </div>
+  <div class="mockup-container">
+    <img src="screenshots/02_add_transaction_screen.png" alt="Add Transaction">
+    <div class="mockup-caption">B. Add Transaction</div>
+    <div class="mockup-sub">Validation Form</div>
+  </div>
+  <div class="mockup-container">
+    <img src="screenshots/03_history_screen.png" alt="Transaction History">
+    <div class="mockup-caption">C. History</div>
+    <div class="mockup-sub">Timeline & Filters</div>
+  </div>
+  <div class="mockup-container">
+    <img src="screenshots/04_budgets_screen.png" alt="Budgets Screen">
+    <div class="mockup-caption">D. Budgets</div>
+    <div class="mockup-sub">Caps & Alerts</div>
+  </div>
+</div>
+
+<div class="screenshots-row">
+  <div class="mockup-container">
+    <img src="screenshots/01_dashboard_screen_scrolled.png" alt="Dashboard Breakdown">
+    <div class="mockup-caption">Dashboard Spending Breakdown & Recent Activity</div>
+    <div class="mockup-sub">Category allocations, percentage share & recent transactions preview</div>
+  </div>
+  <div class="mockup-container">
+    <img src="screenshots/04_budgets_screen_scrolled.png" alt="Over Budget Alert">
+    <div class="mockup-caption">Category Budget Details & Over-Budget Visual Status</div>
+    <div class="mockup-sub">Shopping & Gear highlighted in red for exceeding 100% threshold</div>
+  </div>
+</div>
+
+<div class="screenshots-row">
+  <div class="mockup-container">
+    <img src="screenshots/02_add_transaction_dialog.png" alt="Add Transaction Validated">
+    <div class="mockup-caption">Add Transaction Form Validation & Feedback</div>
+    <div class="mockup-sub">Clean dialog validating inputs and confirming Day 2 persistence readiness</div>
+  </div>
+  <div class="mockup-container">
+    <img src="screenshots/05_settings_db_tested.png" alt="Settings & SQLite Diagnostic">
+    <div class="mockup-caption">Settings & SQLite Database Diagnostic Test</div>
+    <div class="mockup-sub">Live query verifying SQLite connection, schema v1.0, and 11 seeded categories</div>
+  </div>
+</div>
+
+<!-- PAGE BREAK FOR CODE & ARCHITECTURE -->
+<div class="page-break"></div>
+
+<h2>5. Flutter Project Architecture & Folder Structure</h2>
+<p>The code is strictly separated into modular, maintainable directories:</p>
+<table>
+  <tr><th>Directory</th><th>Responsibility</th></tr>
+  <tr><td><code>lib/app/</code></td><td>Application root, Material 3 theme configuration, typography, and bottom navigation scaffold.</td></tr>
+  <tr><td><code>lib/core/constants/</code></td><td>Fintech color palette (<code>AppColors</code>), dimension tokens, and string constants.</td></tr>
+  <tr><td><code>lib/core/database/</code></td><td>SQLite connection singleton (<code>AppDatabase</code>), schema DDL, indexes, and repository helper (<code>DatabaseService</code>).</td></tr>
+  <tr><td><code>lib/core/utils/</code></td><td>Centralized PKR currency formatter and relative date formatting logic.</td></tr>
+  <tr><td><code>lib/core/widgets/</code></td><td>Reusable UI components: <code>CustomCard</code>, <code>MetricCard</code>, <code>PreviewBanner</code>, <code>PrimaryButton</code>, <code>SectionHeader</code>.</td></tr>
+  <tr><td><code>lib/models/</code></td><td>Immutable domain models with minor-unit integer precision and serialization.</td></tr>
+  <tr><td><code>lib/data/</code></td><td>Explicitly identified sample presentation fixtures for Day 1 preview.</td></tr>
+  <tr><td><code>lib/features/</code></td><td>Feature modules containing screens and specialized widgets for Dashboard, Transactions, History, Budgets, and Settings.</td></tr>
+  <tr><td><code>test/</code></td><td>Automated unit tests for models/SQLite and widget integration tests for navigation.</td></tr>
+</table>
+
+<h2>6. Transaction & Category Data Models (Code Evidence)</h2>
+<p>Fintech standard: All monetary figures are stored as integers in minor currency units (paisas / cents). 1 PKR = 100 Paisa.</p>
+
+<div class="code-container">
+  <img src="code/01_models_evidence.png" alt="Models Code Evidence">
+</div>
+
+<h2>7. SQLite Database Setup & Schema (Code Evidence)</h2>
+<p>Foreign keys are enforced via <code>PRAGMA foreign_keys = ON;</code>, indexes optimize queries by date and category, and default categories are seeded inside a single batch transaction on database creation:</p>
+
+<div class="code-container">
+  <img src="code/02_database_setup_evidence.png" alt="Database Setup Code Evidence">
+</div>
+
+<!-- PAGE BREAK FOR TESTS & RETROSPECTIVE -->
+<div class="page-break"></div>
+
+<h2>8. Working Navigation Architecture (Code Evidence)</h2>
+<p>SpendWise features a 5-destination bottom navigation bar powered by <code>IndexedStack</code> to preserve user input and scroll positions across tabs:</p>
+
+<div class="code-container">
+  <img src="code/03_navigation_scaffold_evidence.png" alt="Navigation Code Evidence">
+</div>
+
+<h2>9. Verification Evidence: Flutter Analyze & Automated Tests</h2>
+<p>All automated checks pass with zero warnings, zero errors, and six comprehensive tests:</p>
+
+<div class="code-container">
+  <img src="terminal/04_terminal_test_results.png" alt="Terminal Test Results Evidence">
+</div>
+
+<h2>10. Challenges Encountered & Solutions</h2>
+<ul>
+  <li><strong>Challenge 1 (Host Disk Space Exhaustion):</strong> During the initial build, Windows reported a disk-full error (OS Error 112).<br>
+  <em>Solution:</em> Cleaned system temp caches and emptied the Recycle Bin, recovering over 2.5 GB of free space and unblocking the compiler.</li>
+  <li><strong>Challenge 2 (Material 3 CardTheme Compatibility):</strong> In modern Flutter (v3.47+), assigning a legacy <code>CardTheme</code> to <code>cardTheme</code> triggered a type mismatch lint.<br>
+  <em>Solution:</em> Updated the theme configuration to use <code>CardThemeData</code> in full alignment with the latest Flutter Material 3 SDK.</li>
+  <li><strong>Challenge 3 (Desktop vs. Mobile SQLite Support):</strong> Standard <code>sqflite</code> requires native Android/iOS channels and can fail when running standard Dart unit tests or Windows desktop builds.<br>
+  <em>Solution:</em> Integrated <code>sqflite_common_ffi</code> and implemented dynamic platform detection in <code>AppDatabase</code>, allowing desktop runners and in-memory unit tests to execute SQLite queries flawlessly.</li>
+</ul>
+
+<h2>11. What I Learned Today</h2>
+<ul>
+  <li>How real-world fintech applications prevent floating-point rounding errors by storing money as integer minor currency units (paisas) and converting only at the display boundary.</li>
+  <li>How to design a cohesive, professional fintech design system in Flutter using Material 3 color schemes, custom surfaces, and consistent typographic hierarchy.</li>
+  <li>The architecture of local-first Flutter apps: initializing SQLite safely, enforcing relational integrity with foreign keys, and batch pre-seeding categories.</li>
+  <li>How to build testable, modular Flutter code using <code>IndexedStack</code> navigation and writing widget tests that verify multi-tab user flows.</li>
+</ul>
+
+<h2>12. Remaining Work Planned for Tuesday (Day 2)</h2>
+<ul>
+  <li><strong>Live Transaction CRUD:</strong> Connect the <code>AddTransactionScreen</code> form directly to SQLite via <code>DatabaseService.insertTransaction()</code>.</li>
+  <li><strong>Dynamic History Feed:</strong> Replace sample history data with a reactive stream/FutureBuilder listening to real saved database transactions.</li>
+  <li><strong>Transaction Deletion & Editing:</strong> Implement swipe-to-delete and detail/edit dialogs for recorded expenses and income.</li>
+  <li><strong>Dashboard Live Sync:</strong> Bind the Dashboard total balance, monthly income, and monthly expense cards to real aggregate SQLite queries.</li>
+</ul>
+
+</body>
+</html>
+

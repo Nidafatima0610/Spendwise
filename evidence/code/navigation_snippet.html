@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  body {
+    margin: 0;
+    padding: 30px;
+    background: #0d1117;
+    font-family: 'Consolas', 'Fira Code', 'Courier New', monospace;
+    color: #c9d1d9;
+  }
+  .window {
+    background: #161b22;
+    border-radius: 12px;
+    border: 1px solid #30363d;
+    box-shadow: 0 16px 36px rgba(0,0,0,0.6);
+    overflow: hidden;
+  }
+  .titlebar {
+    background: #21262d;
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #30363d;
+  }
+  .dots {
+    display: flex;
+    gap: 8px;
+    margin-right: 16px;
+  }
+  .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+  .dot.red { background: #ff5f56; }
+  .dot.yellow { background: #ffbd2e; }
+  .dot.green { background: #27c93f; }
+  .title {
+    color: #8b949e;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  pre {
+    margin: 0;
+    padding: 24px;
+    font-size: 13.5px;
+    line-height: 1.55;
+    overflow-x: auto;
+  }
+  .kw { color: #ff7b72; font-weight: bold; }
+  .type { color: #79c0ff; }
+  .str { color: #a5d6ff; }
+  .comment { color: #8b949e; font-style: italic; }
+  .num { color: #d2a8ff; }
+  .fn { color: #d2a8ff; }
+</style>
+</head>
+<body>
+<div class="window">
+  <div class="titlebar">
+    <div class="dots">
+      <div class="dot red"></div>
+      <div class="dot yellow"></div>
+      <div class="dot green"></div>
+    </div>
+    <div class="title">lib/app/navigation/app_scaffold.dart — 5-Destination IndexedStack & Custom Bottom Bar</div>
+  </div>
+  <pre>
+<span class="kw">class</span> <span class="type">AppScaffold</span> <span class="kw">extends</span> <span class="type">StatefulWidget</span> { ... }
+
+<span class="kw">class</span> <span class="type">_AppScaffoldState</span> <span class="kw">extends</span> <span class="type">State</span>&lt;<span class="type">AppScaffold</span>&gt; {
+  <span class="kw">int</span> _currentIndex = <span class="num">0</span>;
+
+  <span class="ann">@override</span>
+  <span class="type">Widget</span> <span class="fn">build</span>(<span class="type">BuildContext</span> context) {
+    <span class="kw">final</span> screens = [
+      <span class="type">DashboardScreen</span>(
+        onNavigateToHistory: () => <span class="fn">_onTabSelected</span>(<span class="num">1</span>),
+        onNavigateToAddTransaction: () => <span class="fn">_onTabSelected</span>(<span class="num">2</span>),
+        onNavigateToBudgets: () => <span class="fn">_onTabSelected</span>(<span class="num">3</span>),
+      ),
+      <span class="type">HistoryScreen</span>(onAddTransactionTap: () => <span class="fn">_onTabSelected</span>(<span class="num">2</span>)),
+      <span class="type">AddTransactionScreen</span>(onTransactionSavedPreview: () => <span class="fn">_onTabSelected</span>(<span class="num">0</span>)),
+      <span class="kw">const</span> <span class="type">BudgetsScreen</span>(),
+      <span class="kw">const</span> <span class="type">SettingsScreen</span>(),
+    ];
+
+    <span class="kw">return</span> <span class="type">Scaffold</span>(
+      <span class="comment">// Preserves scroll offset & form state across all 5 destinations</span>
+      body: <span class="type">IndexedStack</span>(index: _currentIndex, children: screens),
+      bottomNavigationBar: <span class="fn">_buildBottomNavigationBar</span>(),
+    );
+  }
+}
+</pre>
+</div>
+</body>
+</html>
+
