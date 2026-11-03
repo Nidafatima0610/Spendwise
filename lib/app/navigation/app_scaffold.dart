@@ -50,7 +50,7 @@ class _AppScaffoldState extends State<AppScaffold> {
         onAddTransactionTap: () => _onTabSelected(2),
       ),
       AddTransactionScreen(
-        onTransactionSavedPreview: () => _onTabSelected(0),
+        onTransactionSaved: () => _onTabSelected(0),
       ),
       const BudgetsScreen(),
       const SettingsScreen(),

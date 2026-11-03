@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  body {
+    margin: 0;
+    padding: 24px;
+    background: #0d1117;
+    font-family: 'Consolas', 'Fira Code', 'Courier New', monospace;
+    color: #c9d1d9;
+  }
+  .window {
+    background: #161b22;
+    border-radius: 12px;
+    border: 1px solid #30363d;
+    box-shadow: 0 16px 36px rgba(0,0,0,0.6);
+    overflow: hidden;
+  }
+  .titlebar {
+    background: #21262d;
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #30363d;
+  }
+  .dots { display: flex; gap: 8px; margin-right: 16px; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot.red { background: #ff5f56; }
+  .dot.yellow { background: #ffbd2e; }
+  .dot.green { background: #27c93f; }
+  .title { color: #8b949e; font-size: 13px; font-weight: 600; }
+  pre {
+    margin: 0;
+    padding: 22px;
+    font-size: 12.5px;
+    line-height: 1.5;
+    overflow-x: auto;
+  }
+  .kw { color: #ff7b72; font-weight: bold; }
+  .type { color: #79c0ff; }
+  .str { color: #a5d6ff; }
+  .comment { color: #8b949e; font-style: italic; }
+  .fn { color: #d2a8ff; }
+</style>
+</head>
+<body>
+<div class="window">
+  <div class="titlebar">
+    <div class="dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+    <div class="title">lib/features/transactions/screens/add_transaction_screen.dart — Robust Form Validation</div>
+  </div>
+  <pre>
+<span class="type">Future</span>&lt;<span class="type">void</span>&gt; <span class="fn">_submitForm</span>() <span class="kw">async</span> {
+  <span class="type">FocusScope</span>.<span class="fn">of</span>(context).<span class="fn">unfocus</span>();
+
+  <span class="comment">// 1. Prevent duplicate submissions</span>
+  <span class="kw">if</span> (_isSubmitting) <span class="kw">return</span>;
+
+  <span class="comment">// 2. Validate Form Key (empty check &amp; format)</span>
+  <span class="kw">if</span> (!_formKey.currentState!.<span class="fn">validate</span>()) <span class="kw">return</span>;
+
+  <span class="comment">// 3. Validate Category Selection</span>
+  <span class="kw">if</span> (_selectedCategory == <span class="kw">null</span>) {
+    <span class="fn">_showSnackBar</span>(<span class="str">'Please select a category for this transaction.'</span>);
+    <span class="kw">return</span>;
+  }
+
+  <span class="comment">// 4. Validate Amount range &amp; integer minor unit parsing (paisas)</span>
+  <span class="kw">final int</span> minorUnits = <span class="type">CurrencyFormatter</span>.<span class="fn">parseToMinorUnits</span>(_amountController.text);
+  <span class="kw">if</span> (minorUnits &lt;= 0) {
+    <span class="fn">_showSnackBar</span>(<span class="str">'Amount must be greater than zero.'</span>);
+    <span class="kw">return</span>;
+  }
+  <span class="kw">if</span> (minorUnits &gt; 10000000000) { <span class="comment">// 100 Million PKR ceiling</span>
+    <span class="fn">_showSnackBar</span>(<span class="str">'Amount exceeds the maximum supported limit.'</span>);
+    <span class="kw">return</span>;
+  }
+
+  <span class="fn">setState</span>(() =&gt; _isSubmitting = <span class="kw">true</span>);
+
+  <span class="kw">try</span> {
+    <span class="comment">// Inserts new transaction or updates existing record without duplicating</span>
+    <span class="kw">final</span> success = widget.isEditing
+        ? <span class="kw">await</span> _controller.<span class="fn">updateTransaction</span>(updatedTx)
+        : <span class="kw">await</span> _controller.<span class="fn">addTransaction</span>(newTx);
+    ...
+  } <span class="kw">finally</span> {
+    <span class="kw">if</span> (mounted) <span class="fn">setState</span>(() =&gt; _isSubmitting = <span class="kw">false</span>);
+  }
+}
+  </pre>
+</div>
+</body>
+</html>
+

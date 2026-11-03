@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SpendWise — Day 2 Daily Progress Submission Package</title>
+<style>
+  @page {
+    size: A4;
+    margin: 14mm 16mm;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: #1e1435;
+    background: #ffffff;
+    line-height: 1.5;
+    font-size: 13px;
+    margin: 0;
+    padding: 0;
+  }
+  .header {
+    border-bottom: 2px solid #6536c7;
+    padding-bottom: 14px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .brand {
+    font-size: 24px;
+    font-weight: 800;
+    color: #6536c7;
+    letter-spacing: -0.5px;
+  }
+  .brand-sub {
+    font-size: 13px;
+    font-weight: 600;
+    color: #6b647d;
+    margin-top: 2px;
+  }
+  .meta-box {
+    text-align: right;
+    font-size: 11.5px;
+    color: #6b647d;
+    line-height: 1.4;
+  }
+  .badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 999px;
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .badge-purple { background: #ede9fe; color: #4f28a4; }
+  .badge-green { background: #d1fae5; color: #047857; }
+  .badge-red { background: #fee2e2; color: #b91c1c; }
+  
+  h2 {
+    color: #1e1435;
+    font-size: 16px;
+    font-weight: 700;
+    border-left: 4px solid #6536c7;
+    padding-left: 10px;
+    margin-top: 24px;
+    margin-bottom: 10px;
+    page-break-after: avoid;
+  }
+  h3 {
+    color: #4f28a4;
+    font-size: 14px;
+    font-weight: 700;
+    margin-top: 16px;
+    margin-bottom: 6px;
+    page-break-after: avoid;
+  }
+  p, li {
+    color: #2e263d;
+    line-height: 1.55;
+  }
+  ul {
+    margin-top: 4px;
+    margin-bottom: 12px;
+    padding-left: 20px;
+  }
+  li {
+    margin-bottom: 4px;
+  }
+  
+  .card {
+    background: #fbfaff;
+    border: 1px solid #ebe7f5;
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 14px;
+  }
+  .status-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .status-item {
+    background: #f6f4fc;
+    border: 1px solid #e5e1f0;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+  }
+  .status-title {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: #6b647d;
+    text-transform: uppercase;
+  }
+  .status-val {
+    font-size: 15px;
+    font-weight: 800;
+    color: #6536c7;
+    margin-top: 3px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+    margin-bottom: 16px;
+    font-size: 12px;
+  }
+  th, td {
+    border: 1px solid #e5e1f0;
+    padding: 8px 10px;
+    text-align: left;
+  }
+  th {
+    background: #f3f0fa;
+    color: #4f28a4;
+    font-weight: 700;
+  }
+  tr:nth-child(even) {
+    background: #faf9fd;
+  }
+  
+  .screenshots-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin: 14px 0;
+    page-break-inside: avoid;
+  }
+  .screenshots-row-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin: 12px 0;
+    page-break-inside: avoid;
+  }
+  .mockup-container {
+    background: #f6f4fc;
+    border: 1px solid #e5e1f0;
+    border-radius: 10px;
+    padding: 8px;
+    text-align: center;
+  }
+  .mockup-container img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+  .mockup-caption {
+    font-size: 11px;
+    font-weight: 700;
+    color: #4f28a4;
+    margin-top: 6px;
+  }
+  .mockup-sub {
+    font-size: 10px;
+    color: #6b647d;
+  }
+  
+  .code-container {
+    margin: 12px 0;
+    border-radius: 8px;
+    overflow: hidden;
+    page-break-inside: avoid;
+  }
+  .code-container img {
+    width: 100%;
+    display: block;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  
+  .page-break {
+    page-break-before: always;
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div>
+    <div class="brand">SpendWise</div>
+    <div class="brand-sub">Stack &amp; Scale Remote Internship 2026 — Week 02 Mobile Track</div>
+  </div>
+  <div class="meta-box">
+    <div><strong>Submission:</strong> Day 2 Daily Progress Package</div>
+    <div><strong>Date:</strong> Tuesday, November 03, 2026</div>
+    <div><span class="badge badge-purple">Milestone 2 Delivered</span> <span class="badge badge-green">12/12 Tests Passing</span></div>
+  </div>
+</div>
+
+<!-- Status Grid -->
+<div class="status-grid">
+  <div class="status-item">
+    <div class="status-title">Test Suite</div>
+    <div class="status-val">12/12 Passed (100%)</div>
+  </div>
+  <div class="status-item">
+    <div class="status-title">Code Analysis</div>
+    <div class="status-val">0 Issues / Clean</div>
+  </div>
+  <div class="status-item">
+    <div class="status-title">Local SQLite</div>
+    <div class="status-val">Active CRUD &amp; Metrics</div>
+  </div>
+  <div class="status-item">
+    <div class="status-title">Currency Standard</div>
+    <div class="status-val">PKR Paisas (Minor Units)</div>
+  </div>
+</div>
+
+<!-- Section 1 -->
+<h2>1. Project Title &amp; Internship Details</h2>
+<p>
+  <strong>SpendWise – Personal Budget &amp; Expense Tracker</strong> is an offline-first personal finance mobile application built with Flutter and SQLite. Designed specifically for students and early-career professionals, it enables seamless income and expense tracking, categorical budget management, and habit insights without cloud dependencies, paid API keys, or external bank logins.
+</p>
+<div class="card">
+  <strong>Internship Track:</strong> Week 02 — Mobile Architecture, Offline-First SQLite, and Fintech UI/UX<br>
+  <strong>Milestone Date:</strong> Tuesday, November 03, 2026<br>
+  <strong>Primary Technology Stack:</strong> Flutter 3.47.1, Dart 3.13.1, Material 3, SQLite (<code>sqflite</code> + <code>sqflite_common_ffi</code>), <code>intl</code>
+</div>
+
+<!-- Section 2 -->
+<h2>2. Tuesday's Objectives &amp; Completed Deliverables</h2>
+<ul>
+  <li><strong>Functional Transaction Creation:</strong> Transformed <code>AddTransactionScreen</code> from sample preview mode into an active SQLite writer. Income and expense records are validated, converted into minor currency units, and saved directly to local storage.</li>
+  <li><strong>Multi-Layer Form Validation:</strong> Enforced comprehensive validation rejecting empty amounts, zero or negative entries, amounts exceeding 100,000,000 PKR, and missing category selections. Integrated duplicate submission protection with button busy states.</li>
+  <li><strong>Complete SQLite CRUD Operations:</strong> Extended <code>DatabaseService</code> with parameterized queries for insert, newest-first querying, type filtering, category filtering, monthly filtering, in-place updates, and deletions.</li>
+  <li><strong>Reactive Dashboard Synchronization:</strong> Bound <code>DashboardScreen</code> to live SQLite aggregates. Net Balance, Monthly Income, Monthly Expense, Remaining Budget Goal, and Category Spending Distribution update dynamically in real time.</li>
+  <li><strong>Live History Timeline:</strong> Connected <code>HistoryScreen</code> to real SQLite transactions with newest-first ordering, dynamic month discovery, category filters, and an interactive 3-dots action menu.</li>
+  <li><strong>In-Place Transaction Editing:</strong> Enabled editing directly from the History list. Opens pre-populated form in edit mode, saving changes to the existing SQLite record without creating duplicates.</li>
+  <li><strong>Delete Confirmation Flow:</strong> Implemented a destructive-action alert dialog protecting against accidental deletion before permanently removing rows from SQLite.</li>
+  <li><strong>Day 3 Budget Preservation:</strong> Preserved category budget CRUD operations intact for Wednesday (Day 3).</li>
+</ul>
+
+<!-- Section 3 -->
+<h2>3. SQLite Architecture &amp; Reactive State Management</h2>
+<p>
+  SpendWise utilizes a repository architecture decoupled across three primary tiers: UI Presentation, Reactive State Management, and Local SQLite Storage.
+</p>
+
+<div class="code-container">
+  <img src="code/01_database_crud_evidence.png" alt="Database CRUD Operations Evidence">
+</div>
+
+<p>
+  State synchronization is powered by <code>TransactionController</code>, a zero-dependency singleton extending standard Flutter <code>ChangeNotifier</code>. When any write occurs, the controller re-executes SQLite aggregations and issues <code>notifyListeners()</code>, causing screens to rebuild instantaneously via <code>ListenableBuilder</code>.
+</p>
+
+<div class="code-container">
+  <img src="code/02_transaction_controller_evidence.png" alt="Transaction Controller Evidence">
+</div>
+
+<div class="page-break"></div>
+
+<!-- Section 4 -->
+<h2>4. Form Validation &amp; Fintech Precision Standard</h2>
+<p>
+  To eliminate binary floating-point rounding errors common in financial applications, SpendWise enforces the <strong>Minor Currency Units Standard</strong>:
+</p>
+<ul>
+  <li>All currency amounts are stored strictly as 64-bit <strong>integers representing paisas</strong> ($1\text{ PKR} = 100\text{ Paisas}$).</li>
+  <li>An entry of <code>PKR 3,500.50</code> is parsed and stored as <code>350050</code>.</li>
+  <li>All SQLite aggregate operations (<code>SUM(amount)</code>) perform exact integer arithmetic with zero precision loss.</li>
+</ul>
+
+<div class="code-container">
+  <img src="code/03_form_validation_evidence.png" alt="Form Validation Evidence">
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>Validation Rule</th>
+      <th>Behavior &amp; User Feedback</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Amount Input</strong></td>
+      <td>Cannot be empty</td>
+      <td>Triggers inline form error: "Please enter a transaction amount"</td>
+    </tr>
+    <tr>
+      <td><strong>Numeric Range</strong></td>
+      <td>Must be positive ($> 0$)</td>
+      <td>Rejects zero and negative numbers: "Amount must be greater than zero"</td>
+    </tr>
+    <tr>
+      <td><strong>Ceiling Cap</strong></td>
+      <td>$\le 100,000,000\text{ PKR}$</td>
+      <td>Prevents numeric overflow: "Amount exceeds maximum supported limit"</td>
+    </tr>
+    <tr>
+      <td><strong>Category</strong></td>
+      <td>Mandatory selection</td>
+      <td>Shows warning SnackBar if no category chip is selected</td>
+    </tr>
+    <tr>
+      <td><strong>Concurrency</strong></td>
+      <td>Duplicate submission prevention</td>
+      <td>Disables submit button and displays loading spinner while saving</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Section 5 -->
+<h2>5. Quality Assurance: Automated Tests &amp; Code Analysis</h2>
+<p>
+  The project was verified against Flutter's official test harness, including 6 dedicated SQLite unit tests with table isolation and 6 widget tests validating UI workflows and models.
+</p>
+
+<div class="code-container">
+  <img src="terminal/04_terminal_test_results.png" alt="Terminal Test Results Evidence">
+</div>
+
+<ul>
+  <li><strong>Static Analysis:</strong> <code>flutter analyze</code> passed with <strong>0 errors, 0 warnings, and 0 lints</strong>.</li>
+  <li><strong>Unit &amp; Widget Tests:</strong> <code>flutter test</code> passed <strong>12 out of 12 tests</strong> in 7 seconds.</li>
+  <li><strong>Test Coverage:</strong> Verified valid creation, newest-first ordering, record updating, record deletion, net balance and monthly totals aggregations, foreign key constraint enforcement, empty amount rejection, zero/negative rejection, and full multi-screen UI lifecycle (create $\rightarrow$ view $\rightarrow$ edit $\rightarrow$ delete).</li>
+</ul>
+
+<div class="page-break"></div>
+
+<!-- Section 6 -->
+<h2>6. Mobile Application Visual Evidence</h2>
+<p>
+  The following mobile interface captures from the Google Pixel 6 Pro environment demonstrate the application's premium fintech design system, responsive layouts, and cohesive violet brand identity (<code>#6536C7</code>).
+</p>
+
+<div class="screenshots-row">
+  <div class="mockup-container">
+    <img src="screenshots/01_dashboard_screen.png" alt="Dashboard Screen">
+    <div class="mockup-caption">Screen A: Financial Dashboard</div>
+    <div class="mockup-sub">Live balance card, monthly totals, remaining budget, and category distribution</div>
+  </div>
+  <div class="mockup-container">
+    <img src="screenshots/02_add_transaction_screen.png" alt="Add Transaction Screen">
+    <div class="mockup-caption">Screen B: Record Transaction</div>
+    <div class="mockup-sub">Expense/Income toggle, preset chips, dynamic category selector, and validation</div>
+  </div>
+</div>
+
+<div class="screenshots-row">
+  <div class="mockup-container">
+    <img src="screenshots/03_history_screen.png" alt="Transaction History Screen">
+    <div class="mockup-caption">Screen C: Transaction History</div>
+    <div class="mockup-sub">Newest-first chronological feed, dynamic month filters, and action menus</div>
+  </div>
+  <div class="mockup-container">
+    <img src="screenshots/04_budgets_screen.png" alt="Budgets Screen">
+    <div class="mockup-caption">Screen D: Monthly Budgets</div>
+    <div class="mockup-sub">Category limits, over-budget warning badges, and Day 3 foundation preview</div>
+  </div>
+</div>
+
+<div class="page-break"></div>
+
+<!-- Section 7 -->
+<h2>7. Challenges Encountered &amp; Senior Engineering Solutions</h2>
+<div class="card">
+  <strong>1. Test Isolation in SQLite FFI Unit Tests</strong><br>
+  <em>Challenge:</em> Running sequential tests with shared in-memory database paths caused state leakage where transactions created in earlier tests polluted subsequent tests.<br>
+  <em>Solution:</em> Refactored <code>test/database_test.dart</code> to generate a unique database file path per test using timestamped microseconds (<code>test_db_${DateTime.now().microsecondsSinceEpoch}.db</code>), opening fresh connections in <code>setUp()</code> and cleaning up files in <code>tearDown()</code>.
+</div>
+
+<div class="card">
+  <strong>2. FakeAsync Zone Boundary in Widget Tests</strong><br>
+  <em>Challenge:</em> Flutter widget tests run inside <code>fakeAsync</code>. Calling asynchronous background FFI isolates caused <code>pumpAndSettle()</code> to advance virtual clock time by 10 minutes almost instantly, before the native background isolate delivered its message port response.<br>
+  <em>Solution:</em> Designed <code>FakeDatabaseService extends DatabaseService</code>, an in-memory repository implementing the exact repository interface for widget tests. This allowed widget tests to verify form validation, interactive creation, edit mode, delete dialogs, and UI rebuilds instantly in-memory, while <code>test/database_test.dart</code> verified 100% of real native SQLite queries independently.
+</div>
+
+<div class="card">
+  <strong>3. Floating SnackBar Feedback Queuing</strong><br>
+  <em>Challenge:</em> Rapid create, edit, and delete operations queued multiple SnackBars behind Flutter's 4-second default timer, causing noticeable feedback lag.<br>
+  <em>Solution:</em> Added <code>ScaffoldMessenger.of(context).clearSnackBars()</code> prior to displaying each new confirmation, ensuring user feedback is delivered immediately.
+</div>
+
+<!-- Section 8 -->
+<h2>8. Key Engineering Learnings</h2>
+<ul>
+  <li><strong>Fintech Mathematical Precision:</strong> Utilizing minor currency units (paisas) standardizes database persistence and ensures zero precision loss in aggregate SQL calculations.</li>
+  <li><strong>Separation of Concerns in Repositories:</strong> Decoupling database queries from state controllers enables clean mockability, high test execution speed, and maintainable application code.</li>
+  <li><strong>Zero-Dependency Flutter Reactive State:</strong> Leveraging <code>ChangeNotifier</code> and <code>ListenableBuilder</code> yields a responsive, clean architecture without heavy third-party state management libraries.</li>
+</ul>
+
+<!-- Section 9 -->
+<h2>9. Wednesday Roadmap (Day 3: Budgets CRUD)</h2>
+<ul>
+  <li>Implement category budget creation and editing forms.</li>
+  <li>Persist custom budget caps in the SQLite <code>budgets</code> table.</li>
+  <li>Implement 80% and 100% threshold warning indicators.</li>
+  <li>Connect <code>BudgetsScreen</code> cards to dynamic monthly expense calculations.</li>
+</ul>
+
+<!-- Section 10 -->
+<h2>10. Google Form Submission Checklist</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Requirement</th>
+      <th>Evidence / File Location</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Submission PDF</strong></td>
+      <td><code>evidence/SpendWise_Day2_Progress_Submission.pdf</code></td>
+      <td><span class="badge badge-green">Ready to Upload</span></td>
+    </tr>
+    <tr>
+      <td><strong>Markdown Report</strong></td>
+      <td><code>evidence/SpendWise_Day2_Progress_Submission.md</code></td>
+      <td><span class="badge badge-green">Delivered</span></td>
+    </tr>
+    <tr>
+      <td><strong>Static Analysis</strong></td>
+      <td><code>flutter analyze</code> — 0 issues found (<code>evidence/terminal/flutter_analyze.txt</code>)</td>
+      <td><span class="badge badge-green">Verified</span></td>
+    </tr>
+    <tr>
+      <td><strong>Automated Tests</strong></td>
+      <td><code>flutter test</code> — 12/12 passed (<code>evidence/terminal/flutter_test.txt</code>)</td>
+      <td><span class="badge badge-green">Verified</span></td>
+    </tr>
+    <tr>
+      <td><strong>Code Evidence</strong></td>
+      <td><code>evidence/code/01_database_crud_evidence.png</code>, <code>02_transaction_controller_evidence.png</code>, <code>03_form_validation_evidence.png</code></td>
+      <td><span class="badge badge-green">Attached</span></td>
+    </tr>
+    <tr>
+      <td><strong>Terminal Evidence</strong></td>
+      <td><code>evidence/terminal/04_terminal_test_results.png</code></td>
+      <td><span class="badge badge-green">Attached</span></td>
+    </tr>
+  </tbody>
+</table>
+
+</body>
+</html>
+

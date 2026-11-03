@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  body {
+    margin: 0;
+    padding: 24px;
+    background: #0d1117;
+    font-family: 'Consolas', 'Fira Code', 'Courier New', monospace;
+    color: #c9d1d9;
+  }
+  .window {
+    background: #161b22;
+    border-radius: 12px;
+    border: 1px solid #30363d;
+    box-shadow: 0 16px 36px rgba(0,0,0,0.6);
+    overflow: hidden;
+  }
+  .titlebar {
+    background: #21262d;
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #30363d;
+  }
+  .dots { display: flex; gap: 8px; margin-right: 16px; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot.red { background: #ff5f56; }
+  .dot.yellow { background: #ffbd2e; }
+  .dot.green { background: #27c93f; }
+  .title { color: #8b949e; font-size: 13px; font-weight: 600; }
+  pre {
+    margin: 0;
+    padding: 22px;
+    font-size: 12.5px;
+    line-height: 1.5;
+    overflow-x: auto;
+  }
+  .kw { color: #ff7b72; font-weight: bold; }
+  .type { color: #79c0ff; }
+  .str { color: #a5d6ff; }
+  .comment { color: #8b949e; font-style: italic; }
+  .fn { color: #d2a8ff; }
+</style>
+</head>
+<body>
+<div class="window">
+  <div class="titlebar">
+    <div class="dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+    <div class="title">lib/core/database/database_service.dart — Parameterized SQLite CRUD &amp; Metrics</div>
+  </div>
+  <pre>
+<span class="comment">/// Inserts a new transaction into SQLite using parameterized ConflictAlgorithm.replace</span>
+<span class="type">Future</span>&lt;<span class="type">int</span>&gt; <span class="fn">insertTransaction</span>(<span class="type">TransactionModel</span> transaction) <span class="kw">async</span> {
+  <span class="kw">final</span> activeDb = <span class="kw">await</span> db;
+  <span class="kw">return await</span> activeDb.<span class="fn">insert</span>(DatabaseConstants.tableTransactions, transaction.<span class="fn">toMap</span>(), conflictAlgorithm: ConflictAlgorithm.replace);
+}
+
+<span class="comment">/// Retrieves all transactions ordered newest first (DESC)</span>
+<span class="type">Future</span>&lt;<span class="type">List</span>&lt;<span class="type">TransactionModel</span>&gt;&gt; <span class="fn">getAllTransactions</span>() <span class="kw">async</span> {
+  <span class="kw">final</span> activeDb = <span class="kw">await</span> db;
+  <span class="kw">final</span> maps = <span class="kw">await</span> activeDb.<span class="fn">query</span>(DatabaseConstants.tableTransactions, orderBy: <span class="str">'${DatabaseConstants.colTxDate} DESC'</span>);
+  <span class="kw">return</span> maps.<span class="fn">map</span>((map) =&gt; <span class="type">TransactionModel</span>.<span class="fn">fromMap</span>(map)).<span class="fn">toList</span>();
+}
+
+<span class="comment">/// Updates an existing transaction in SQLite using parameterized ID match</span>
+<span class="type">Future</span>&lt;<span class="type">int</span>&gt; <span class="fn">updateTransaction</span>(<span class="type">TransactionModel</span> transaction) <span class="kw">async</span> {
+  <span class="kw">final</span> activeDb = <span class="kw">await</span> db;
+  <span class="kw">return await</span> activeDb.<span class="fn">update</span>(DatabaseConstants.tableTransactions, transaction.<span class="fn">toMap</span>(),
+      where: <span class="str">'${DatabaseConstants.colTxId} = ?'</span>, whereArgs: [transaction.id]);
+}
+
+<span class="comment">/// Permanently deletes a transaction by ID</span>
+<span class="type">Future</span>&lt;<span class="type">int</span>&gt; <span class="fn">deleteTransaction</span>(<span class="type">String</span> id) <span class="kw">async</span> {
+  <span class="kw">final</span> activeDb = <span class="kw">await</span> db;
+  <span class="kw">return await</span> activeDb.<span class="fn">delete</span>(DatabaseConstants.tableTransactions,
+      where: <span class="str">'${DatabaseConstants.colTxId} = ?'</span>, whereArgs: [id]);
+}
+
+<span class="comment">/// Calculates net total balance in integer minor units (paisas)</span>
+<span class="type">Future</span>&lt;<span class="type">int</span>&gt; <span class="fn">getTotalBalance</span>() <span class="kw">async</span> {
+  <span class="kw">final</span> activeDb = <span class="kw">await</span> db;
+  <span class="kw">final</span> inc = <span class="kw">await</span> activeDb.<span class="fn">rawQuery</span>(<span class="str">'SELECT COALESCE(SUM(amount), 0) as t FROM transactions WHERE type = ?'</span>, [<span class="str">'income'</span>]);
+  <span class="kw">final</span> exp = <span class="kw">await</span> activeDb.<span class="fn">rawQuery</span>(<span class="str">'SELECT COALESCE(SUM(amount), 0) as t FROM transactions WHERE type = ?'</span>, [<span class="str">'expense'</span>]);
+  <span class="kw">return</span> ((inc.first[<span class="str">'t'</span>] <span class="kw">as</span> <span class="type">int</span>?) ?? 0) - ((exp.first[<span class="str">'t'</span>] <span class="kw">as</span> <span class="type">int</span>?) ?? 0);
+}
+  </pre>
+</div>
+</body>
+</html>
+

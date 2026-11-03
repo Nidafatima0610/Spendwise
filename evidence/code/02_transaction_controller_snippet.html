@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  body {
+    margin: 0;
+    padding: 24px;
+    background: #0d1117;
+    font-family: 'Consolas', 'Fira Code', 'Courier New', monospace;
+    color: #c9d1d9;
+  }
+  .window {
+    background: #161b22;
+    border-radius: 12px;
+    border: 1px solid #30363d;
+    box-shadow: 0 16px 36px rgba(0,0,0,0.6);
+    overflow: hidden;
+  }
+  .titlebar {
+    background: #21262d;
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #30363d;
+  }
+  .dots { display: flex; gap: 8px; margin-right: 16px; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot.red { background: #ff5f56; }
+  .dot.yellow { background: #ffbd2e; }
+  .dot.green { background: #27c93f; }
+  .title { color: #8b949e; font-size: 13px; font-weight: 600; }
+  pre {
+    margin: 0;
+    padding: 22px;
+    font-size: 12.5px;
+    line-height: 1.5;
+    overflow-x: auto;
+  }
+  .kw { color: #ff7b72; font-weight: bold; }
+  .type { color: #79c0ff; }
+  .str { color: #a5d6ff; }
+  .comment { color: #8b949e; font-style: italic; }
+  .fn { color: #d2a8ff; }
+</style>
+</head>
+<body>
+<div class="window">
+  <div class="titlebar">
+    <div class="dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+    <div class="title">lib/core/controllers/transaction_controller.dart — Zero-Dependency Reactive State</div>
+  </div>
+  <pre>
+<span class="kw">class</span> <span class="type">TransactionController</span> <span class="kw">extends</span> <span class="type">ChangeNotifier</span> {
+  <span class="kw">static</span> <span class="type">TransactionController</span> instance = <span class="fn">TransactionController</span>();
+
+  <span class="comment">/// Adds a new transaction to SQLite and triggers real-time UI rebuild</span>
+  <span class="type">Future</span>&lt;<span class="type">bool</span>&gt; <span class="fn">addTransaction</span>(<span class="type">TransactionModel</span> transaction) <span class="kw">async</span> {
+    <span class="kw">try</span> {
+      <span class="kw">final</span> rows = <span class="kw">await</span> _dbService.<span class="fn">insertTransaction</span>(transaction);
+      <span class="kw">if</span> (rows &gt; 0) {
+        <span class="kw">await</span> <span class="fn">_loadTransactionsAndMetrics</span>();
+        <span class="fn">notifyListeners</span>(); <span class="comment">// Updates DashboardScreen and HistoryScreen via ListenableBuilder</span>
+        <span class="kw">return true</span>;
+      }
+      <span class="kw">return false</span>;
+    } <span class="kw">catch</span> (e) {
+      <span class="kw">return false</span>;
+    }
+  }
+
+  <span class="comment">/// Updates an existing transaction in SQLite and recalculates metrics</span>
+  <span class="type">Future</span>&lt;<span class="type">bool</span>&gt; <span class="fn">updateTransaction</span>(<span class="type">TransactionModel</span> transaction) <span class="kw">async</span> {
+    <span class="kw">try</span> {
+      <span class="kw">final</span> rows = <span class="kw">await</span> _dbService.<span class="fn">updateTransaction</span>(transaction);
+      <span class="kw">if</span> (rows &gt; 0) {
+        <span class="kw">await</span> <span class="fn">_loadTransactionsAndMetrics</span>();
+        <span class="fn">notifyListeners</span>();
+        <span class="kw">return true</span>;
+      }
+      <span class="kw">return false</span>;
+    } <span class="kw">catch</span> (e) {
+      <span class="kw">return false</span>;
+    }
+  }
+
+  <span class="comment">/// Deletes transaction from SQLite by ID and refreshes state</span>
+  <span class="type">Future</span>&lt;<span class="type">bool</span>&gt; <span class="fn">deleteTransaction</span>(<span class="type">String</span> id) <span class="kw">async</span> {
+    <span class="kw">try</span> {
+      <span class="kw">final</span> rows = <span class="kw">await</span> _dbService.<span class="fn">deleteTransaction</span>(id);
+      <span class="kw">if</span> (rows &gt; 0) {
+        <span class="kw">await</span> <span class="fn">_loadTransactionsAndMetrics</span>();
+        <span class="fn">notifyListeners</span>();
+        <span class="kw">return true</span>;
+      }
+      <span class="kw">return false</span>;
+    } <span class="kw">catch</span> (e) {
+      <span class="kw">return false</span>;
+    }
+  }
+}
+  </pre>
+</div>
+</body>
+</html>
+

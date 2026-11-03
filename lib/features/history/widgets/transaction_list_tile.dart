@@ -8,17 +8,21 @@ import '../../../models/transaction_model.dart';
 import '../../../data/sample_data.dart';
 
 /// Clean transaction list tile displaying category icon, title, note, date,
-/// and visually distinguished income/expense amount.
+/// visually distinguished income/expense amount, and action menu for edit/delete.
 class TransactionListTile extends StatelessWidget {
   final TransactionModel transaction;
   final CategoryModel? category;
   final VoidCallback? onTap;
+  final VoidCallback? onEdit;
+  final VoidCallback? onDelete;
 
   const TransactionListTile({
     super.key,
     required this.transaction,
     this.category,
     this.onTap,
+    this.onEdit,
+    this.onDelete,
   });
 
   @override
@@ -35,7 +39,7 @@ class TransactionListTile extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: onTap,
+        onTap: onTap ?? onEdit,
         borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
         child: Padding(
           padding: const EdgeInsets.symmetric(
@@ -58,7 +62,7 @@ class TransactionListTile extends StatelessWidget {
                   size: 22,
                 ),
               ),
-              const SizedBox(width: AppDimensions.space14),
+              const SizedBox(width: AppDimensions.space12),
 
               // Title and Note / Date
               Expanded(
@@ -105,7 +109,7 @@ class TransactionListTile extends StatelessWidget {
 
               const SizedBox(width: AppDimensions.space8),
 
-              // Amount
+              // Amount & Type Badge
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
@@ -137,6 +141,56 @@ class TransactionListTile extends StatelessWidget {
                   ),
                 ],
               ),
+
+              // Action Options (Edit / Delete) if callbacks provided
+              if (onEdit != null || onDelete != null) ...[
+                PopupMenuButton<String>(
+                  key: Key('tx_menu_${transaction.id}'),
+                  icon: const Icon(
+                    Icons.more_vert_rounded,
+                    size: 18,
+                    color: AppColors.textMuted,
+                  ),
+                  padding: EdgeInsets.zero,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
+                  ),
+                  onSelected: (value) {
+                    if (value == 'edit' && onEdit != null) {
+                      onEdit!();
+                    } else if (value == 'delete' && onDelete != null) {
+                      onDelete!();
+                    }
+                  },
+                  itemBuilder: (context) => [
+                    if (onEdit != null)
+                      PopupMenuItem(
+                        value: 'edit',
+                        child: Row(
+                          children: [
+                            const Icon(Icons.edit_outlined, size: 18, color: AppColors.primary),
+                            const SizedBox(width: AppDimensions.space10),
+                            Text('Edit Entry', style: AppTypography.bodyMedium),
+                          ],
+                        ),
+                      ),
+                    if (onDelete != null)
+                      PopupMenuItem(
+                        value: 'delete',
+                        child: Row(
+                          children: [
+                            const Icon(Icons.delete_outline_rounded, size: 18, color: AppColors.expense),
+                            const SizedBox(width: AppDimensions.space10),
+                            Text(
+                              'Delete',
+                              style: AppTypography.bodyMedium.copyWith(color: AppColors.expense),
+                            ),
+                          ],
+                        ),
+                      ),
+                  ],
+                ),
+              ],
             ],
           ),
         ),
@@ -144,4 +198,3 @@ class TransactionListTile extends StatelessWidget {
     );
   }
 }
-
