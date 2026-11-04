@@ -40,10 +40,6 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   final TransactionController _controller = TransactionController.instance;
 
-  // Monthly budget ceiling (in minor units: PKR 60,000.00 = 6,000,000 paisas)
-  // Prepared for Day 3 dynamic budget limits
-  static const int _defaultMonthlyBudgetCapMinor = 6000000;
-
   Future<void> _openEditTransaction(TransactionModel transaction) async {
     final result = await Navigator.push<bool>(
       context,
@@ -282,9 +278,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                     const SizedBox(height: AppDimensions.space16),
 
-                    // 6. Remaining Budget Overview (Connected to real monthly expense)
+                    // 6. Remaining Budget Overview (Connected to real monthly budget and expenses)
                     RemainingBudgetCard(
-                      totalBudgetCapMinor: _defaultMonthlyBudgetCapMinor,
+                      totalBudgetCapMinor: _controller.monthlyBudgetCapMinor,
                       totalSpentMinor: _controller.monthlyExpenseMinor,
                       onManageBudgetTap: widget.onNavigateToBudgets,
                     ),

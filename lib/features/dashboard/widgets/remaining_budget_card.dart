@@ -20,13 +20,37 @@ class RemainingBudgetCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double progress = totalBudgetCapMinor > 0
+    final bool hasBudget = totalBudgetCapMinor > 0;
+    final double progress = hasBudget
         ? (totalSpentMinor / totalBudgetCapMinor).clamp(0.0, 1.0)
         : 0.0;
-    final int percentage = (progress * 100).round();
-    final int remainingMinor = (totalBudgetCapMinor - totalSpentMinor) > 0
-        ? (totalBudgetCapMinor - totalSpentMinor)
+    final int percentage = hasBudget
+        ? ((totalSpentMinor / totalBudgetCapMinor) * 100).round()
         : 0;
+    final int remainingMinor = totalBudgetCapMinor - totalSpentMinor;
+    final bool isOver = hasBudget && totalSpentMinor > totalBudgetCapMinor;
+
+    String badgeLabel;
+    Color badgeColor;
+    Color badgeTextColor;
+
+    if (!hasBudget) {
+      badgeLabel = 'No Budget Set';
+      badgeColor = AppColors.surfaceVariant;
+      badgeTextColor = AppColors.textSecondary;
+    } else if (isOver) {
+      badgeLabel = 'Over Budget';
+      badgeColor = AppColors.expenseLight;
+      badgeTextColor = AppColors.expenseDark;
+    } else if (percentage >= 80) {
+      badgeLabel = '$percentage% Near Limit';
+      badgeColor = AppColors.warningLight;
+      badgeTextColor = AppColors.warning;
+    } else {
+      badgeLabel = '$percentage% Spent';
+      badgeColor = AppColors.primaryUltraLight;
+      badgeTextColor = AppColors.primaryDark;
+    }
 
     return CustomCard(
       onTap: onManageBudgetTap,
@@ -66,13 +90,13 @@ class RemainingBudgetCard extends StatelessWidget {
                   vertical: AppDimensions.space4,
                 ),
                 decoration: BoxDecoration(
-                  color: percentage > 85 ? AppColors.expenseLight : AppColors.primaryUltraLight,
+                  color: badgeColor,
                   borderRadius: BorderRadius.circular(AppDimensions.radiusFull),
                 ),
                 child: Text(
-                  '$percentage% Spent',
+                  badgeLabel,
                   style: AppTypography.labelSmall.copyWith(
-                    color: percentage > 85 ? AppColors.expenseDark : AppColors.primaryDark,
+                    color: badgeTextColor,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -89,9 +113,9 @@ class RemainingBudgetCard extends StatelessWidget {
               minHeight: 8,
               backgroundColor: AppColors.surfaceVariant,
               valueColor: AlwaysStoppedAnimation<Color>(
-                percentage > 90
+                isOver
                     ? AppColors.expense
-                    : (percentage > 75 ? AppColors.warning : AppColors.primary),
+                    : (percentage >= 80 ? AppColors.warning : AppColors.primary),
               ),
             ),
           ),
@@ -105,14 +129,18 @@ class RemainingBudgetCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Remaining',
+                    isOver ? 'Exceeded' : 'Remaining',
                     style: AppTypography.bodySmall,
                   ),
                   const SizedBox(height: AppDimensions.space2),
                   Text(
-                    CurrencyFormatter.formatMinorUnits(remainingMinor),
+                    !hasBudget
+                        ? 'PKR 0.00'
+                        : (isOver
+                            ? '-${CurrencyFormatter.formatMinorUnits(-remainingMinor)}'
+                            : CurrencyFormatter.formatMinorUnits(remainingMinor)),
                     style: AppTypography.titleMedium.copyWith(
-                      color: AppColors.primary,
+                      color: isOver ? AppColors.expenseDark : AppColors.primary,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -141,4 +169,3 @@ class RemainingBudgetCard extends StatelessWidget {
     );
   }
 }
-

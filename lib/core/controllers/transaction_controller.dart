@@ -5,6 +5,7 @@ import '../../data/sample_data.dart';
 import '../database/database_service.dart';
 import '../utils/date_formatter.dart';
 import '../../features/dashboard/widgets/category_spend_bar.dart';
+import 'budget_controller.dart';
 
 /// Central state manager for SpendWise transactions and financial metrics.
 /// 
@@ -25,6 +26,7 @@ class TransactionController extends ChangeNotifier {
   int _totalBalanceMinor = 0;
   int _monthlyIncomeMinor = 0;
   int _monthlyExpenseMinor = 0;
+  int _monthlyBudgetCapMinor = 0;
   List<CategorySpendItem> _categorySpending = [];
 
   String _currentMonthYear = DateFormatter.toMonthYearKey(DateTime.now());
@@ -39,6 +41,7 @@ class TransactionController extends ChangeNotifier {
   int get totalBalanceMinor => _totalBalanceMinor;
   int get monthlyIncomeMinor => _monthlyIncomeMinor;
   int get monthlyExpenseMinor => _monthlyExpenseMinor;
+  int get monthlyBudgetCapMinor => _monthlyBudgetCapMinor;
   List<CategorySpendItem> get categorySpending => _categorySpending;
 
   String get currentMonthYear => _currentMonthYear;
@@ -91,6 +94,7 @@ class TransactionController extends ChangeNotifier {
     _monthlyIncomeMinor = await _dbService.getMonthlyIncome(_currentMonthYear);
     _monthlyExpenseMinor = await _dbService.getMonthlyExpense(_currentMonthYear);
     _totalBalanceMinor = await _dbService.getTotalBalance();
+    _monthlyBudgetCapMinor = await _dbService.getTotalBudgetForMonth(_currentMonthYear);
 
     // 3. Compute Category Spending breakdown for active month
     final rawSpending = await _dbService.getCategorySpending(_currentMonthYear);
@@ -126,6 +130,7 @@ class TransactionController extends ChangeNotifier {
       if (rows > 0) {
         await _loadTransactionsAndMetrics();
         notifyListeners();
+        BudgetController.instance.refresh();
         return true;
       }
       return false;
@@ -142,6 +147,7 @@ class TransactionController extends ChangeNotifier {
       if (rows > 0) {
         await _loadTransactionsAndMetrics();
         notifyListeners();
+        BudgetController.instance.refresh();
         return true;
       }
       return false;
@@ -158,6 +164,7 @@ class TransactionController extends ChangeNotifier {
       if (rows > 0) {
         await _loadTransactionsAndMetrics();
         notifyListeners();
+        BudgetController.instance.refresh();
         return true;
       }
       return false;
@@ -185,5 +192,6 @@ class TransactionController extends ChangeNotifier {
     _currentMonthYear = monthYear;
     await _loadTransactionsAndMetrics();
     notifyListeners();
+    BudgetController.instance.setMonth(monthYear);
   }
 }

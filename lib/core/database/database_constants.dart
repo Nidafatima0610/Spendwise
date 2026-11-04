@@ -74,5 +74,9 @@ class DatabaseConstants {
   static const String createTransactionsCategoryIndex = '''
     CREATE INDEX idx_transactions_category ON $tableTransactions ($colTxCategoryId);
   ''';
+
+  static const String createBudgetsCategoryMonthIndex = '''
+    CREATE UNIQUE INDEX IF NOT EXISTS idx_budgets_category_month ON $tableBudgets ($colBudgetCategoryId, $colBudgetMonthYear);
+  ''';
 }
 

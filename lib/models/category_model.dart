@@ -22,6 +22,12 @@ class CategoryModel {
   /// Flutter Color representation of [colorValue].
   Color get color => Color(colorValue);
 
+  /// Whether this is an expense category.
+  bool get isExpense => type == TransactionType.expense;
+
+  /// Whether this is an income category.
+  bool get isIncome => type == TransactionType.income;
+
   /// Resolves the icon identifier string to an appropriate Material IconData.
   IconData get iconData {
     switch (iconName.toLowerCase()) {

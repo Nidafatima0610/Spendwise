@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:spend_wise/app/app.dart';
 import 'package:spend_wise/core/constants/app_strings.dart';
+import 'package:spend_wise/core/controllers/budget_controller.dart';
 import 'package:spend_wise/core/controllers/transaction_controller.dart';
 import 'package:spend_wise/core/database/database_service.dart';
 import 'package:spend_wise/core/utils/currency_formatter.dart';
 import 'package:spend_wise/core/utils/date_formatter.dart';
 import 'package:spend_wise/features/transactions/screens/add_transaction_screen.dart';
+import 'package:spend_wise/models/budget_model.dart';
 import 'package:spend_wise/models/category_model.dart';
 import 'package:spend_wise/models/transaction_model.dart';
 
@@ -34,6 +36,7 @@ class FakeDatabaseService extends DatabaseService {
   ];
 
   final List<TransactionModel> _fakeTransactions = [];
+  final List<BudgetModel> _fakeBudgets = [];
 
   @override
   Future<List<CategoryModel>> getAllCategories() async => List.from(_fakeCategories);
@@ -150,19 +153,113 @@ class FakeDatabaseService extends DatabaseService {
     list.sort((a, b) => (b['total_spent'] as int).compareTo(a['total_spent'] as int));
     return list;
   }
+
+  // Budget Overrides for Widget Tests
+  @override
+  Future<int> insertBudget(BudgetModel budget) async {
+    final exists = _fakeBudgets.any(
+      (b) => b.categoryId == budget.categoryId && b.monthYear == budget.monthYear,
+    );
+    if (exists) {
+      throw ArgumentError('A budget for this category and month already exists.');
+    }
+    _fakeBudgets.add(budget);
+    return 1;
+  }
+
+  @override
+  Future<List<BudgetModel>> getBudgetsByMonth(String monthYear) async {
+    final list = _fakeBudgets.where((b) => b.monthYear == monthYear).toList();
+    return Future.wait(list.map((b) async {
+      final spent = await getCategorySpentAmount(b.categoryId, monthYear);
+      return b.copyWith(spentAmount: spent);
+    }));
+  }
+
+  @override
+  Future<BudgetModel?> getBudgetByCategoryAndMonth(String categoryId, String monthYear) async {
+    try {
+      final b = _fakeBudgets.firstWhere(
+        (b) => b.categoryId == categoryId && b.monthYear == monthYear,
+      );
+      final spent = await getCategorySpentAmount(categoryId, monthYear);
+      return b.copyWith(spentAmount: spent);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  @override
+  Future<BudgetModel?> getBudgetById(String id) async {
+    try {
+      final b = _fakeBudgets.firstWhere((b) => b.id == id);
+      final spent = await getCategorySpentAmount(b.categoryId, b.monthYear);
+      return b.copyWith(spentAmount: spent);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  @override
+  Future<int> updateBudget(BudgetModel budget) async {
+    final idx = _fakeBudgets.indexWhere((b) => b.id == budget.id);
+    if (idx != -1) {
+      _fakeBudgets[idx] = budget;
+      return 1;
+    }
+    return 0;
+  }
+
+  @override
+  Future<int> deleteBudget(String id) async {
+    final count = _fakeBudgets.where((b) => b.id == id).length;
+    _fakeBudgets.removeWhere((b) => b.id == id);
+    return count;
+  }
+
+  @override
+  Future<int> getCategorySpentAmount(String categoryId, String monthYear) async {
+    return _fakeTransactions
+        .where((t) =>
+            t.isExpense &&
+            t.categoryId == categoryId &&
+            DateFormatter.toMonthYearKey(t.date) == monthYear)
+        .fold<int>(0, (sum, t) => sum + t.amount);
+  }
+
+  @override
+  Future<int> getTotalBudgetForMonth(String monthYear) async {
+    return _fakeBudgets
+        .where((b) => b.monthYear == monthYear)
+        .fold<int>(0, (sum, b) => sum + b.limitAmount);
+  }
+
+  @override
+  Future<int> getBudgetCount() async => _fakeBudgets.length;
+
+  @override
+  Future<int> clearAllBudgets() async {
+    final count = _fakeBudgets.length;
+    _fakeBudgets.clear();
+    return count;
+  }
 }
 
 void main() {
   late FakeDatabaseService fakeDb;
   late TransactionController testController;
+  late BudgetController testBudgetController;
 
   setUp(() async {
     fakeDb = FakeDatabaseService();
     testController = TransactionController(dbService: fakeDb);
+    testBudgetController = BudgetController(dbService: fakeDb);
     await testController.loadInitialData();
+    await testBudgetController.loadBudgets();
 
-    // Set test controller singleton
+    // Set test singletons
     TransactionController.instance = testController;
+    BudgetController.instance = testBudgetController;
   });
 
   group('Day 2 Form Validation Tests', () {

@@ -1,4 +1,5 @@
 import 'package:sqflite/sqflite.dart';
+import '../../models/budget_model.dart';
 import '../../models/category_model.dart';
 import '../../models/transaction_model.dart';
 import 'app_database.dart';
@@ -259,5 +260,139 @@ class DatabaseService {
   Future<int> clearAllTransactions() async {
     final activeDb = await db;
     return await activeDb.delete(DatabaseConstants.tableTransactions);
+  }
+
+  // ================= BUDGETS (CRUD & CALCULATIONS) =================
+
+  /// Inserts a new monthly budget into SQLite.
+  /// Throws an [ArgumentError] if a budget for this category and month already exists.
+  Future<int> insertBudget(BudgetModel budget) async {
+    final activeDb = await db;
+    // Enforce business rule: Prevent duplicate budgets for the same category and month
+    final existing = await activeDb.query(
+      DatabaseConstants.tableBudgets,
+      where: '${DatabaseConstants.colBudgetCategoryId} = ? AND ${DatabaseConstants.colBudgetMonthYear} = ?',
+      whereArgs: [budget.categoryId, budget.monthYear],
+      limit: 1,
+    );
+    if (existing.isNotEmpty) {
+      throw ArgumentError(
+        'A budget for category ${budget.categoryId} in month ${budget.monthYear} already exists.',
+      );
+    }
+
+    return await activeDb.insert(
+      DatabaseConstants.tableBudgets,
+      budget.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.abort,
+    );
+  }
+
+  /// Retrieves all budgets for a given month with live spent amounts calculated from transactions.
+  Future<List<BudgetModel>> getBudgetsByMonth(String monthYear) async {
+    final activeDb = await db;
+    final maps = await activeDb.query(
+      DatabaseConstants.tableBudgets,
+      where: '${DatabaseConstants.colBudgetMonthYear} = ?',
+      whereArgs: [monthYear],
+    );
+
+    final List<BudgetModel> budgets = [];
+    for (final map in maps) {
+      final categoryId = map[DatabaseConstants.colBudgetCategoryId] as String;
+      final spent = await getCategorySpentAmount(categoryId, monthYear);
+      budgets.add(BudgetModel.fromMap(map, currentSpent: spent));
+    }
+    return budgets;
+  }
+
+  /// Retrieves a budget by category ID and month-year with live spent amount.
+  Future<BudgetModel?> getBudgetByCategoryAndMonth(String categoryId, String monthYear) async {
+    final activeDb = await db;
+    final maps = await activeDb.query(
+      DatabaseConstants.tableBudgets,
+      where: '${DatabaseConstants.colBudgetCategoryId} = ? AND ${DatabaseConstants.colBudgetMonthYear} = ?',
+      whereArgs: [categoryId, monthYear],
+      limit: 1,
+    );
+    if (maps.isEmpty) return null;
+    final spent = await getCategorySpentAmount(categoryId, monthYear);
+    return BudgetModel.fromMap(maps.first, currentSpent: spent);
+  }
+
+  /// Retrieves a budget by its primary key ID.
+  Future<BudgetModel?> getBudgetById(String id) async {
+    final activeDb = await db;
+    final maps = await activeDb.query(
+      DatabaseConstants.tableBudgets,
+      where: '${DatabaseConstants.colBudgetId} = ?',
+      whereArgs: [id],
+      limit: 1,
+    );
+    if (maps.isEmpty) return null;
+    final categoryId = maps.first[DatabaseConstants.colBudgetCategoryId] as String;
+    final monthYear = maps.first[DatabaseConstants.colBudgetMonthYear] as String;
+    final spent = await getCategorySpentAmount(categoryId, monthYear);
+    return BudgetModel.fromMap(maps.first, currentSpent: spent);
+  }
+
+  /// Updates an existing budget record in SQLite.
+  Future<int> updateBudget(BudgetModel budget) async {
+    final activeDb = await db;
+    return await activeDb.update(
+      DatabaseConstants.tableBudgets,
+      budget.toMap(),
+      where: '${DatabaseConstants.colBudgetId} = ?',
+      whereArgs: [budget.id],
+    );
+  }
+
+  /// Deletes a budget by ID.
+  Future<int> deleteBudget(String id) async {
+    final activeDb = await db;
+    return await activeDb.delete(
+      DatabaseConstants.tableBudgets,
+      where: '${DatabaseConstants.colBudgetId} = ?',
+      whereArgs: [id],
+    );
+  }
+
+  /// Calculates actual expense spending for a specific category and month in minor units.
+  Future<int> getCategorySpentAmount(String categoryId, String monthYear) async {
+    final activeDb = await db;
+    final result = await activeDb.rawQuery(
+      'SELECT COALESCE(SUM(${DatabaseConstants.colTxAmount}), 0) as total '
+      'FROM ${DatabaseConstants.tableTransactions} '
+      'WHERE ${DatabaseConstants.colTxType} = ? AND ${DatabaseConstants.colTxCategoryId} = ? AND ${DatabaseConstants.colTxDate} LIKE ?',
+      [TransactionType.expense.name, categoryId, '$monthYear%'],
+    );
+    return (result.first['total'] as int?) ?? 0;
+  }
+
+  /// Calculates the sum of all budget limits for a given month in minor units.
+  Future<int> getTotalBudgetForMonth(String monthYear) async {
+    final activeDb = await db;
+    final result = await activeDb.rawQuery(
+      'SELECT COALESCE(SUM(${DatabaseConstants.colBudgetLimit}), 0) as total '
+      'FROM ${DatabaseConstants.tableBudgets} '
+      'WHERE ${DatabaseConstants.colBudgetMonthYear} = ?',
+      [monthYear],
+    );
+    return (result.first['total'] as int?) ?? 0;
+  }
+
+  /// Returns total count of persisted budgets across all months.
+  Future<int> getBudgetCount() async {
+    final activeDb = await db;
+    final count = Sqflite.firstIntValue(
+      await activeDb.rawQuery('SELECT COUNT(*) FROM ${DatabaseConstants.tableBudgets}'),
+    );
+    return count ?? 0;
+  }
+
+  /// Deletes all budgets. Useful for testing or account reset.
+  Future<int> clearAllBudgets() async {
+    final activeDb = await db;
+    return await activeDb.delete(DatabaseConstants.tableBudgets);
   }
 }

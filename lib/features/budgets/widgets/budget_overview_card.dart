@@ -9,12 +9,14 @@ class BudgetOverviewCard extends StatelessWidget {
   final int totalCapMinor;
   final int totalSpentMinor;
   final int overBudgetCategoryCount;
+  final String? monthLabel;
 
   const BudgetOverviewCard({
     super.key,
     required this.totalCapMinor,
     required this.totalSpentMinor,
-    this.overBudgetCategoryCount = 1,
+    this.overBudgetCategoryCount = 0,
+    this.monthLabel,
   });
 
   @override
@@ -22,10 +24,27 @@ class BudgetOverviewCard extends StatelessWidget {
     final double progress = totalCapMinor > 0
         ? (totalSpentMinor / totalCapMinor).clamp(0.0, 1.0)
         : 0.0;
-    final int percentage = (progress * 100).round();
-    final int remainingMinor = (totalCapMinor - totalSpentMinor) > 0
-        ? (totalCapMinor - totalSpentMinor)
+    final int percentage = totalCapMinor > 0
+        ? ((totalSpentMinor / totalCapMinor) * 100).round()
         : 0;
+    final int remainingMinor = totalCapMinor - totalSpentMinor;
+    final bool isOver = totalCapMinor > 0 && totalSpentMinor > totalCapMinor;
+
+    String statusBadgeText;
+    Color statusBadgeBg;
+    if (totalCapMinor <= 0) {
+      statusBadgeText = 'No Budget Set';
+      statusBadgeBg = Colors.white.withValues(alpha: 0.2);
+    } else if (isOver) {
+      statusBadgeText = 'Pool Exceeded';
+      statusBadgeBg = const Color(0xFFEF4444).withValues(alpha: 0.4);
+    } else if (percentage >= 80) {
+      statusBadgeText = '$percentage% Near Limit';
+      statusBadgeBg = const Color(0xFFF59E0B).withValues(alpha: 0.4);
+    } else {
+      statusBadgeText = '$percentage% Allocated';
+      statusBadgeBg = Colors.white.withValues(alpha: 0.2);
+    }
 
     return CustomCard(
       gradient: const LinearGradient(
@@ -44,11 +63,13 @@ class BudgetOverviewCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'MONTHLY BUDGET POOL',
+                monthLabel != null
+                    ? 'MONTHLY BUDGET POOL • ${monthLabel!.toUpperCase()}'
+                    : 'MONTHLY BUDGET POOL',
                 style: AppTypography.labelSmall.copyWith(
                   color: Colors.white.withValues(alpha: 0.8),
                   fontWeight: FontWeight.w700,
-                  letterSpacing: 1.0,
+                  letterSpacing: 0.8,
                 ),
               ),
               Container(
@@ -57,11 +78,11 @@ class BudgetOverviewCard extends StatelessWidget {
                   vertical: AppDimensions.space4,
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.2),
+                  color: statusBadgeBg,
                   borderRadius: BorderRadius.circular(AppDimensions.radiusFull),
                 ),
                 child: Text(
-                  '$percentage% Allocated',
+                  statusBadgeText,
                   style: AppTypography.labelSmall.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.w700,
@@ -71,8 +92,13 @@ class BudgetOverviewCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: AppDimensions.space12),
+
           Text(
-            CurrencyFormatter.formatMinorUnits(remainingMinor),
+            totalCapMinor <= 0
+                ? 'PKR 0.00'
+                : (remainingMinor < 0
+                    ? '-${CurrencyFormatter.formatMinorUnits(-remainingMinor)}'
+                    : CurrencyFormatter.formatMinorUnits(remainingMinor)),
             style: AppTypography.displayMedium.copyWith(
               color: Colors.white,
               fontWeight: FontWeight.w800,
@@ -80,7 +106,11 @@ class BudgetOverviewCard extends StatelessWidget {
           ),
           const SizedBox(height: AppDimensions.space4),
           Text(
-            'Remaining to spend safely this month',
+            totalCapMinor <= 0
+                ? 'No category budgets active for this month'
+                : (isOver
+                    ? 'Total expenses exceed monthly budget cap'
+                    : 'Remaining to spend safely this month'),
             style: AppTypography.bodySmall.copyWith(
               color: Colors.white.withValues(alpha: 0.85),
             ),
@@ -94,7 +124,11 @@ class BudgetOverviewCard extends StatelessWidget {
               value: progress,
               minHeight: 8,
               backgroundColor: Colors.white.withValues(alpha: 0.2),
-              valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF6EE7B7)),
+              valueColor: AlwaysStoppedAnimation<Color>(
+                isOver
+                    ? const Color(0xFFF87171)
+                    : (percentage >= 80 ? const Color(0xFFFBBF24) : const Color(0xFF6EE7B7)),
+              ),
             ),
           ),
           const SizedBox(height: AppDimensions.space14),

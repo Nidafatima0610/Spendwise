@@ -56,5 +56,24 @@ class DateFormatter {
     final month = date.month.toString().padLeft(2, '0');
     return '${date.year}-$month';
   }
+
+  /// Parses a month-year storage key (e.g. "2026-11") into a DateTime object.
+  static DateTime parseMonthYearKey(String key) {
+    try {
+      final parts = key.split('-');
+      if (parts.length >= 2) {
+        final year = int.parse(parts[0]);
+        final month = int.parse(parts[1]);
+        return DateTime(year, month);
+      }
+    } catch (_) {}
+    return DateTime.now();
+  }
+
+  /// Formats a month-year storage key (e.g. "2026-11") to "November 2026".
+  static String formatMonthYearKey(String key) {
+    final date = parseMonthYearKey(key);
+    return formatMonthYear(date);
+  }
 }
 

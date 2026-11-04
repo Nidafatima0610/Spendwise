@@ -45,12 +45,21 @@ class AppDatabase {
       onConfigure: _onConfigure,
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
+      onOpen: _onOpen,
     );
   }
 
   /// Enables foreign key constraints on the SQLite connection.
   Future<void> _onConfigure(Database db) async {
     await db.execute('PRAGMA foreign_keys = ON;');
+  }
+
+  /// Ensures tables and indexes are ready on open.
+  Future<void> _onOpen(Database db) async {
+    await db.execute(
+      DatabaseConstants.createBudgetsTable.replaceAll('CREATE TABLE', 'CREATE TABLE IF NOT EXISTS'),
+    );
+    await db.execute(DatabaseConstants.createBudgetsCategoryMonthIndex);
   }
 
   /// Creates schema tables, indexes, and pre-seeds default categories.
@@ -65,6 +74,7 @@ class AppDatabase {
     // 2. Create Indexes
     batch.execute(DatabaseConstants.createTransactionsDateIndex);
     batch.execute(DatabaseConstants.createTransactionsCategoryIndex);
+    batch.execute(DatabaseConstants.createBudgetsCategoryMonthIndex);
 
     // 3. Pre-seed Default Categories into SQLite
     _seedDefaultCategories(batch);
