@@ -75,5 +75,26 @@ class DateFormatter {
     final date = parseMonthYearKey(key);
     return formatMonthYear(date);
   }
+
+  /// Shifts a month-year storage key (e.g. "2026-11") backward by one month.
+  /// Handles year boundary transition (e.g. "2027-01" -> "2026-12").
+  static String getPreviousMonthKey(String key) {
+    final date = parseMonthYearKey(key);
+    final prev = DateTime(date.year, date.month - 1);
+    return toMonthYearKey(prev);
+  }
+
+  /// Shifts a month-year storage key (e.g. "2026-11") forward by one month.
+  /// Handles year boundary transition (e.g. "2026-12" -> "2027-01").
+  static String getNextMonthKey(String key) {
+    final date = parseMonthYearKey(key);
+    final next = DateTime(date.year, date.month + 1);
+    return toMonthYearKey(next);
+  }
+
+  /// Checks if a [DateTime] falls within the month specified by [monthYearKey] ("YYYY-MM").
+  static bool isInMonth(DateTime date, String monthYearKey) {
+    return toMonthYearKey(date) == monthYearKey;
+  }
 }
 
