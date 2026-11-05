@@ -36,7 +36,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       _isCheckingDb = false;
       if (isHealthy) {
         _dbStatusText =
-            '✅ SQLite Connected & Ready\n• Pre-seeded Categories: $categoryCount\n• Persisted Transactions: $txCount\n• Schema Version: 1.0 (Day 1)';
+            '✅ SQLite Connected & Ready\n• Pre-seeded Categories: $categoryCount\n• Persisted Transactions: $txCount\n• Schema Version: 1.0 (Offline-First SQLite Engine)';
       } else {
         _dbStatusText = '⚠️ SQLite connection issue. Check permissions.';
       }
@@ -221,7 +221,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     _buildSettingsTile(
                       icon: Icons.info_outline_rounded,
                       title: 'Milestone Scope',
-                      subtitle: 'Day 1: Architecture, 4 Screens, SQLite Schema',
+                      subtitle: 'Full Release: Offline Tracker, Budgets & Visualizations',
                     ),
                     const Divider(height: 1),
                     _buildSettingsTile(

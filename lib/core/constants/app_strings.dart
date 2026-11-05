@@ -5,7 +5,7 @@ class AppStrings {
   // App Meta
   static const String appName = 'SpendWise';
   static const String appTagline = 'Personal Budget & Expense Tracker';
-  static const String appVersion = 'v1.0.0 (Day 1 Foundation)';
+  static const String appVersion = 'v1.0.0 (Production Release)';
 
   // Currency Configuration (Centralized)
   /// Default currency code. Configured to PKR as required by Stack & Scale Week 02.
