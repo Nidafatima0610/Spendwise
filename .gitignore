@@ -49,3 +49,7 @@ app.*.map.json
 
 # Docx Generator tool dependencies
 .docx_tool/
+
+# Documentation backups & investigation
+documentation/backups/
+documentation_investigation_96cea85/

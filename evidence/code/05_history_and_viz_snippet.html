@@ -9,7 +9,6 @@
     background: #0d1117;
     font-family: 'Consolas', 'Fira Code', 'Courier New', monospace;
     color: #c9d1d9;
-    width: 950px;
   }
   .window {
     background: #161b22;
@@ -49,10 +48,10 @@
 <div class="window">
   <div class="titlebar">
     <div class="dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
-    <div class="title">lib/features/history/widgets/category_spending_visualization.dart — Proportional Spending Bars</div>
+    <div class="title">lib/features/history/widgets/category_spending_visualization.dart — Filters &amp; Analytics</div>
   </div>
   <pre>
-<span class="comment">/// Calculates spending share percentage with zero-division safety</span>
+<span class="comment">/// Calculates spending share percentage with zero-division safeguard</span>
 <span class="type">double</span> <span class="fn">_calculatePercentage</span>(<span class="type">int</span> categorySpentMinor, <span class="type">int</span> totalMonthlyExpenseMinor) {
   <span class="comment">// Zero-division safeguard for months with no recorded expenses</span>
   <span class="kw">if</span> (totalMonthlyExpenseMinor &lt;= 0) <span class="kw">return</span> 0.0;
@@ -60,33 +59,18 @@
   <span class="kw">return</span> percentage.clamp(0.0, 100.0);
 }
 
-<span class="comment">/// Renders proportional animated horizontal spending bars</span>
-<span class="type">Widget</span> <span class="fn">_buildCategoryBar</span>(<span class="type">CategoryModel</span> category, <span class="type">int</span> spentAmountMinor, <span class="type">double</span> sharePercentage) {
-  <span class="kw">return</span> <span class="type">Padding</span>(
-    padding: <span class="kw">const</span> <span class="type">EdgeInsets</span>.<span class="fn">only</span>(bottom: AppDimensions.space16),
-    child: <span class="type">Column</span>(
-      crossAxisAlignment: <span class="type">CrossAxisAlignment</span>.start,
-      children: [
-        <span class="type">Row</span>(
-          mainAxisAlignment: <span class="type">MainAxisAlignment</span>.spaceBetween,
-          children: [
-            <span class="type">Text</span>(category.name, style: AppTypography.bodyMedium),
-            <span class="type">Text</span>(<span class="str">'${sharePercentage.toStringAsFixed(1)}% • ${CurrencyFormatter.formatMinorUnits(spentAmountMinor)}'</span>),
-          ],
-        ),
-        <span class="kw">const</span> <span class="type">SizedBox</span>(height: AppDimensions.space8),
-        <span class="type">ClipRRect</span>(
-          borderRadius: <span class="type">BorderRadius</span>.<span class="fn">circular</span>(AppDimensions.radiusFull),
-          child: <span class="type">LinearProgressIndicator</span>(
-            value: sharePercentage / 100.0,
-            valueColor: <span class="type">AlwaysStoppedAnimation</span>&lt;<span class="type">Color</span>&gt;(<span class="type">Color</span>(category.colorValue)),
-            backgroundColor: AppColors.surfaceLavender,
-            minHeight: 10,
-          ),
-        ),
-      ],
-    ),
-  );
+<span class="comment">/// Multi-axis filtering query combining active month, category chip, and search</span>
+<span class="type">List</span>&lt;<span class="type">TransactionModel</span>&gt; <span class="kw">get</span> <span class="fn">filteredTransactions</span> {
+  <span class="kw">return</span> monthTransactions.<span class="fn">where</span>((tx) {
+    <span class="comment">// 1. Category Filter</span>
+    <span class="kw">if</span> (_selectedCategoryId != <span class="kw">null</span> &amp;&amp; tx.categoryId != _selectedCategoryId) {
+      <span class="kw">return false</span>;
+    }
+    <span class="comment">// 2. Transaction Type Filter (Income / Expense / All)</span>
+    <span class="kw">if</span> (_selectedType == <span class="str">'Expenses'</span> &amp;&amp; !tx.isExpense) <span class="kw">return false</span>;
+    <span class="kw">if</span> (_selectedType == <span class="str">'Income'</span> &amp;&amp; !tx.isIncome) <span class="kw">return false</span>;
+    <span class="kw">return true</span>;
+  }).<span class="fn">toList</span>();
 }
   </pre>
 </div>
