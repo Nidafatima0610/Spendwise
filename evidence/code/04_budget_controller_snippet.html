@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  body {
+    margin: 0;
+    padding: 24px;
+    background: #0d1117;
+    font-family: 'Consolas', 'Fira Code', 'Courier New', monospace;
+    color: #c9d1d9;
+    width: 950px;
+  }
+  .window {
+    background: #161b22;
+    border-radius: 12px;
+    border: 1px solid #30363d;
+    box-shadow: 0 16px 36px rgba(0,0,0,0.6);
+    overflow: hidden;
+  }
+  .titlebar {
+    background: #21262d;
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #30363d;
+  }
+  .dots { display: flex; gap: 8px; margin-right: 16px; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot.red { background: #ff5f56; }
+  .dot.yellow { background: #ffbd2e; }
+  .dot.green { background: #27c93f; }
+  .title { color: #8b949e; font-size: 13px; font-weight: 600; }
+  pre {
+    margin: 0;
+    padding: 22px;
+    font-size: 12.5px;
+    line-height: 1.5;
+    overflow-x: auto;
+  }
+  .kw { color: #ff7b72; font-weight: bold; }
+  .type { color: #79c0ff; }
+  .str { color: #a5d6ff; }
+  .comment { color: #8b949e; font-style: italic; }
+  .fn { color: #d2a8ff; }
+</style>
+</head>
+<body>
+<div class="window">
+  <div class="titlebar">
+    <div class="dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+    <div class="title">lib/core/controllers/budget_controller.dart — Monthly Budget Aggregations &amp; Thresholds</div>
+  </div>
+  <pre>
+<span class="comment">/// Internal worker to query SQLite for budgets and calculate metrics</span>
+<span class="type">Future</span>&lt;<span class="type">void</span>&gt; <span class="fn">_loadBudgetsAndMetrics</span>() <span class="kw">async</span> {
+  <span class="comment">// 1. Retrieve all category budgets with joined spent amounts for active month</span>
+  _budgets = <span class="kw">await</span> _dbService.<span class="fn">getBudgetsByMonth</span>(_selectedMonthYear);
+
+  <span class="type">int</span> totalCap = 0;
+  <span class="type">int</span> totalSpent = 0;
+  <span class="type">int</span> overCount = 0;
+
+  <span class="comment">// 2. Calculate totals and check warning / over-budget conditions</span>
+  <span class="kw">for</span> (<span class="kw">final</span> b <span class="kw">in</span> _budgets) {
+    totalCap += b.limitAmount;
+    totalSpent += b.spentAmount;
+    <span class="kw">if</span> (b.isOverBudget) {
+      overCount++; <span class="comment">// Trigger over-budget alert status</span>
+    }
+  }
+
+  _totalBudgetCapMinor = totalCap;
+  _totalBudgetSpentMinor = totalSpent;
+  _overBudgetCount = overCount;
+}
+
+<span class="comment">/// Evaluates threshold indicators on CategoryBudgetCard</span>
+<span class="comment">/// - On Track: spent &lt; 80% of limit</span>
+<span class="comment">/// - Warning / Near Limit: 80% &lt;= spent &lt; 100% of limit</span>
+<span class="comment">/// - Over Budget: spent &gt;= 100% of limit</span>
+<span class="type">bool</span> <span class="kw">get</span> <span class="fn">isWarning</span> =&gt; spentPercentage &gt;= 80.0 &amp;&amp; spentPercentage &lt; 100.0;
+<span class="type">bool</span> <span class="kw">get</span> <span class="fn">isOverBudget</span> =&gt; spentAmount &gt;= limitAmount;
+<span class="type">double</span> <span class="kw">get</span> <span class="fn">spentPercentage</span> =&gt; limitAmount &gt; 0 ? (spentAmount / limitAmount) * 100 : 0.0;
+  </pre>
+</div>
+</body>
+</html>

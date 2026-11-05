@@ -372,7 +372,7 @@ class PresentationSlideWidget extends StatelessWidget {
             child: ListView.separated(
               physics: const NeverScrollableScrollPhysics(),
               itemCount: navItems.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 8),
+              separatorBuilder: (context, index) => const SizedBox(height: 8),
               itemBuilder: (context, idx) {
                 final isActive = idx == model.activeNavIndex;
                 return Container(
